@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import NavBar from '../components/NavBar.astro';
+import FooterBand from '../components/FooterBand.astro';
+---
+
+<Layout>
+  <main class="min-h-screen flex flex-col items-center bg-paper text-ink">
+    <NavBar />
+    <section class="flex-1 w-full max-w-4xl px-6 mt-16 text-center">
+      <h1 class="text-sm uppercase tracking-[0.1em]">Contact</h1>
+      <p class="mt-6 text-[11px] leading-relaxed">
+        Say hello at <a class="underline hover:text-accent focus-visible-outline" href="mailto:hello@example.com">hello@example.com</a>.
+      </p>
+    </section>
+    <FooterBand />
+  </main>
+</Layout>
+

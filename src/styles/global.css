@@ -1,0 +1,34 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,700&display=swap');
+
+@layer base {
+  :root {
+    color: #1B1A1C;
+    background-color: #F6F2E7;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background-color: #F6F2E7;
+    color: #1B1A1C;
+  }
+
+  ::selection {
+    background-color: #DA3832;
+    color: #F6F2E7;
+  }
+}
+
+@layer utilities {
+  .focus-visible-outline:focus-visible {
+    outline: 1px solid #DA3832;
+    outline-offset: 2px;
+  }
+}
+
