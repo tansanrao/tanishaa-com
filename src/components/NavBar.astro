@@ -1,10 +1,26 @@
-<nav class="w-full max-w-5xl mx-auto px-6 pt-10">
-  <div class="flex items-center justify-between text-[11px] tracking-[0.08em] uppercase text-ink">
-    <a href="/" class="font-normal transition-colors hover:text-accent focus-visible-outline">Tanishaa Rao</a>
-    <div class="flex items-center gap-8">
-      <a href="/work" class="transition-colors hover:text-accent focus-visible-outline">Work</a>
-      <a href="/contact" class="transition-colors hover:text-accent focus-visible-outline">Contact</a>
+---
+interface Props {
+  active?: 'work' | 'contact';
+}
+
+const { active } = Astro.props;
+
+const linkClass = (isActive: boolean) =>
+  `transition-colors hover:text-accent focus-visible-outline ${isActive ? 'text-accent' : 'text-ink'}`;
+---
+
+<nav class="w-full max-w-[1280px] mx-auto px-8 pt-10">
+  <div class="flex items-center justify-between text-[12px] uppercase tracking-[0.08em] text-ink">
+    <a href="/" class="font-medium transition-colors hover:text-accent focus-visible-outline">Tanishaa Rao</a>
+    <div class="flex items-center gap-10">
+      <a href="/work" class={linkClass(active === 'work')} aria-current={active === 'work' ? 'page' : undefined}>Work</a>
+      <a
+        href="/contact"
+        class={linkClass(active === 'contact')}
+        aria-current={active === 'contact' ? 'page' : undefined}
+      >
+        Contact
+      </a>
     </div>
   </div>
 </nav>
-

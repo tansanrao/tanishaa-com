@@ -1,0 +1,86 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import NavBar from '../../components/NavBar.astro';
+import FooterBand from '../../components/FooterBand.astro';
+import ProjectGallery from '../../components/work/ProjectGallery.astro';
+import ProjectMeta from '../../components/work/ProjectMeta.astro';
+import { workProjects } from '../../data/work';
+
+export async function getStaticPaths() {
+  return workProjects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const gallery = project.gallery.length
+  ? project.gallery
+  : [{ src: project.coverImage, alt: `${project.title} cover image` }];
+const processGallery = project.processGallery.length ? project.processGallery : gallery.slice(0, 4);
+const viewerId = `project-viewer-${project.slug}`;
+---
+
+<Layout pageTitle={`Tanishaa Rao — ${project.title}`}>
+  <main class="min-h-screen bg-paper text-ink">
+    <NavBar active="work" />
+
+    <section class="mx-auto mt-16 w-full max-w-[1280px] px-8 pb-24">
+      <div class="mb-8">
+        <a href="/work" class="focus-visible-outline font-accent text-[12px] uppercase tracking-[0.18em] text-ink/60 transition hover:text-accent">
+          Back to Work
+        </a>
+      </div>
+
+      <ProjectGallery
+        gallery={gallery}
+        title={project.title}
+        viewerId={viewerId}
+        viewerGroups={{ main: gallery, process: processGallery }}
+      />
+
+      <div class="mt-8 border-t border-ink/10 pt-8">
+        <ProjectMeta
+          title={project.title}
+          medium={project.medium}
+          publication={project.publication}
+          summary={project.detailSummary}
+        />
+      </div>
+
+      <section class="mt-20 grid grid-cols-[180px_minmax(0,1fr)] gap-x-20">
+        <div class="space-y-6">
+          {processGallery.map((item, index) => (
+            <button
+              type="button"
+              class="focus-visible-outline block w-full overflow-hidden border border-ink/12 bg-[#0f0f10] transition hover:border-ink/28"
+              data-viewer-trigger-id={viewerId}
+              data-viewer-group="process"
+              data-viewer-index={index}
+              aria-label={`Open ${project.title} process image ${index + 1} in fullscreen`}
+            >
+              <div class="flex h-[92px] w-full items-center justify-center bg-[#0f0f10]">
+                <img class="h-full w-full object-cover" src={item.src} alt={item.alt} loading="lazy" />
+              </div>
+            </button>
+          ))}
+        </div>
+
+        <div class="max-w-[720px]">
+          <div class="mb-6 flex items-end justify-between gap-10">
+            <p class="max-w-[40ch] text-[14px] leading-[1.6] text-ink/76">
+              This section frames the thinking, material exploration, and sequencing behind the project.
+            </p>
+            <h2 class="text-[34px] font-semibold uppercase leading-none tracking-[-0.04em]">Process</h2>
+          </div>
+
+          <div class="rich-copy max-w-none text-[14px] leading-[1.7] text-ink/82">
+            {project.processBody.map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <FooterBand />
+  </main>
+</Layout>

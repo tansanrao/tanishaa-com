@@ -1,0 +1,311 @@
+---
+interface GalleryItem {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+interface Props {
+  gallery: GalleryItem[];
+  title: string;
+  viewerId: string;
+  viewerGroups?: Record<string, GalleryItem[]>;
+}
+
+const { gallery, title, viewerId, viewerGroups = { main: gallery } } = Astro.props;
+---
+
+<section class="grid grid-cols-[minmax(0,1fr)_120px] gap-12" data-project-gallery data-viewer-id={viewerId}>
+  <script type="application/json" data-viewer-groups set:html={JSON.stringify(viewerGroups)} />
+
+  <div class="space-y-4">
+    <div class="relative overflow-hidden border border-ink/12 bg-[#0f0f10]">
+      <div class="viewer-stage h-[460px] w-full cursor-zoom-in" data-inline-stage>
+        {gallery.map((item, index) => (
+          <button
+            type="button"
+            class:list={[
+              'gallery-slide absolute inset-0 flex h-full w-full items-center justify-center p-5',
+              index === 0 ? 'flex' : 'hidden',
+            ]}
+            data-gallery-slide
+            data-index={index}
+            data-caption={item.caption ?? item.alt}
+            aria-label={`Open ${title} image ${index + 1} in fullscreen`}
+          >
+            <img class="h-full w-full object-contain" src={item.src} alt={item.alt} />
+          </button>
+        ))}
+      </div>
+
+      <div class="pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-between px-5">
+        <button
+          type="button"
+          class="viewer-icon-button pointer-events-auto"
+          data-gallery-prev
+          aria-label="Previous image"
+        >
+          <span aria-hidden="true" class="text-2xl leading-none">‹</span>
+        </button>
+        <button
+          type="button"
+          class="viewer-icon-button pointer-events-auto"
+          data-gallery-next
+          aria-label="Next image"
+        >
+          <span aria-hidden="true" class="text-2xl leading-none">›</span>
+        </button>
+      </div>
+
+      <div class="absolute bottom-4 right-4">
+        <button
+          type="button"
+          class="viewer-icon-button h-11 min-w-11 px-4 text-[11px] uppercase tracking-[0.14em]"
+          data-gallery-open
+          aria-label={`Open ${title} gallery in fullscreen`}
+        >
+          Fullscreen
+        </button>
+      </div>
+    </div>
+
+    <div class="min-h-[20px] text-[12px] uppercase tracking-[0.12em] text-ink/60" data-gallery-caption>
+      {gallery[0]?.caption ?? gallery[0]?.alt}
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-4 pt-10">
+    {gallery.map((item, index) => (
+      <button
+        type="button"
+        class:list={[
+          'focus-visible-outline overflow-hidden border bg-[#d9d9d9] transition',
+          index === 0 ? 'border-accent' : 'border-ink/12 hover:border-ink/30',
+        ]}
+        data-gallery-thumb
+        data-index={index}
+        aria-label={`View image ${index + 1} for ${title}`}
+        aria-pressed={index === 0 ? 'true' : 'false'}
+      >
+        <img class="h-[72px] w-full object-cover" src={item.src} alt="" />
+      </button>
+    ))}
+  </div>
+
+  <div class="fixed inset-0 z-[80] hidden items-center justify-center bg-black/88 px-10 py-10" data-viewer-overlay>
+    <button type="button" class="absolute inset-0" data-viewer-close aria-label="Close fullscreen viewer"></button>
+
+    <div class="relative z-10 flex max-h-full w-full flex-col items-center justify-center gap-5">
+      <div class="flex w-full max-w-[1400px] items-center justify-between gap-8">
+        <div class="font-accent text-[12px] uppercase tracking-[0.16em] text-paper/70" data-viewer-counter></div>
+        <button type="button" class="viewer-icon-button" data-viewer-dismiss aria-label="Close viewer">
+          <span aria-hidden="true" class="text-xl leading-none">×</span>
+        </button>
+      </div>
+
+      <div class="relative flex w-full max-w-[1400px] items-center justify-center">
+        <button
+          type="button"
+          class="viewer-icon-button absolute left-6 top-1/2 z-10 -translate-y-1/2"
+          data-viewer-prev
+          aria-label="Previous fullscreen image"
+        >
+          <span aria-hidden="true" class="text-2xl leading-none">‹</span>
+        </button>
+
+        <div class="viewer-stage viewer-stage-fullscreen">
+          <img class="h-full w-full object-contain" data-viewer-image src="" alt="" />
+        </div>
+
+        <button
+          type="button"
+          class="viewer-icon-button absolute right-6 top-1/2 z-10 -translate-y-1/2"
+          data-viewer-next
+          aria-label="Next fullscreen image"
+        >
+          <span aria-hidden="true" class="text-2xl leading-none">›</span>
+        </button>
+      </div>
+
+      <div class="min-h-[20px] max-w-[900px] text-center text-[12px] uppercase tracking-[0.12em] text-paper/72" data-viewer-caption></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const initProjectGalleries = () => {
+    const galleries = document.querySelectorAll('[data-project-gallery]');
+
+    galleries.forEach((galleryRoot) => {
+      if (!(galleryRoot instanceof HTMLElement) || galleryRoot.dataset.bound === 'true') {
+        return;
+      }
+
+      galleryRoot.dataset.bound = 'true';
+
+      const viewerId = galleryRoot.dataset.viewerId;
+      const groupsNode = galleryRoot.querySelector('[data-viewer-groups]');
+      const groups =
+        groupsNode instanceof HTMLScriptElement && groupsNode.textContent
+          ? JSON.parse(groupsNode.textContent)
+          : { main: [] };
+
+      const slides = Array.from(galleryRoot.querySelectorAll('[data-gallery-slide]'));
+      const thumbs = Array.from(galleryRoot.querySelectorAll('[data-gallery-thumb]'));
+      const prevButton = galleryRoot.querySelector('[data-gallery-prev]');
+      const nextButton = galleryRoot.querySelector('[data-gallery-next]');
+      const openButton = galleryRoot.querySelector('[data-gallery-open]');
+      const caption = galleryRoot.querySelector('[data-gallery-caption]');
+      const overlay = galleryRoot.querySelector('[data-viewer-overlay]');
+      const viewerImage = galleryRoot.querySelector('[data-viewer-image]');
+      const viewerCaption = galleryRoot.querySelector('[data-viewer-caption]');
+      const viewerCounter = galleryRoot.querySelector('[data-viewer-counter]');
+      const viewerPrev = galleryRoot.querySelector('[data-viewer-prev]');
+      const viewerNext = galleryRoot.querySelector('[data-viewer-next]');
+      const viewerCloseButtons = galleryRoot.querySelectorAll('[data-viewer-close], [data-viewer-dismiss]');
+
+      let inlineIndex = 0;
+      let activeGroup = 'main';
+      let activeViewerIndex = 0;
+
+      const wrapIndex = (index, length) => (index + length) % length;
+
+      const setInline = (nextIndex) => {
+        if (!slides.length) {
+          return;
+        }
+
+        inlineIndex = wrapIndex(nextIndex, slides.length);
+
+        slides.forEach((slide, index) => {
+          slide.classList.toggle('hidden', index !== inlineIndex);
+          slide.classList.toggle('flex', index === inlineIndex);
+        });
+
+        thumbs.forEach((thumb, index) => {
+          thumb.setAttribute('aria-pressed', index === inlineIndex ? 'true' : 'false');
+          thumb.classList.toggle('border-accent', index === inlineIndex);
+          thumb.classList.toggle('border-ink/12', index !== inlineIndex);
+        });
+
+        const activeSlide = slides[inlineIndex];
+        if (caption instanceof HTMLElement && activeSlide instanceof HTMLElement) {
+          caption.textContent = activeSlide.dataset.caption ?? '';
+        }
+      };
+
+      const getActiveItems = () => groups[activeGroup] ?? [];
+
+      const setViewer = (groupName, nextIndex) => {
+        const items = groups[groupName] ?? [];
+        if (!items.length || !(overlay instanceof HTMLElement) || !(viewerImage instanceof HTMLImageElement)) {
+          return;
+        }
+
+        activeGroup = groupName;
+        activeViewerIndex = wrapIndex(nextIndex, items.length);
+        const current = items[activeViewerIndex];
+
+        viewerImage.src = current.src;
+        viewerImage.alt = current.alt ?? '';
+
+        if (viewerCaption instanceof HTMLElement) {
+          viewerCaption.textContent = current.caption ?? current.alt ?? '';
+        }
+
+        if (viewerCounter instanceof HTMLElement) {
+          viewerCounter.textContent = `${activeViewerIndex + 1} / ${items.length}`;
+        }
+      };
+
+      const openViewer = (groupName, nextIndex) => {
+        if (!(overlay instanceof HTMLElement)) {
+          return;
+        }
+
+        setViewer(groupName, nextIndex);
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        document.body.classList.add('viewer-open');
+      };
+
+      const closeViewer = () => {
+        if (!(overlay instanceof HTMLElement)) {
+          return;
+        }
+
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+        document.body.classList.remove('viewer-open');
+      };
+
+      prevButton?.addEventListener('click', () => setInline(inlineIndex - 1));
+      nextButton?.addEventListener('click', () => setInline(inlineIndex + 1));
+      openButton?.addEventListener('click', () => openViewer('main', inlineIndex));
+
+      slides.forEach((slide, index) => {
+        slide.addEventListener('click', () => openViewer('main', index));
+      });
+
+      thumbs.forEach((thumb, index) => {
+        thumb.addEventListener('click', () => setInline(index));
+      });
+
+      viewerPrev?.addEventListener('click', () => {
+        const items = getActiveItems();
+        if (items.length) {
+          setViewer(activeGroup, activeViewerIndex - 1);
+        }
+      });
+
+      viewerNext?.addEventListener('click', () => {
+        const items = getActiveItems();
+        if (items.length) {
+          setViewer(activeGroup, activeViewerIndex + 1);
+        }
+      });
+
+      viewerCloseButtons.forEach((button) => {
+        button.addEventListener('click', closeViewer);
+      });
+
+      if (viewerId) {
+        const externalTriggers = document.querySelectorAll(`[data-viewer-trigger-id="${viewerId}"]`);
+        externalTriggers.forEach((trigger) => {
+          if (!(trigger instanceof HTMLElement) || trigger.dataset.bound === 'true') {
+            return;
+          }
+
+          trigger.dataset.bound = 'true';
+          const groupName = trigger.dataset.viewerGroup ?? 'main';
+          const index = Number(trigger.dataset.viewerIndex ?? '0');
+          trigger.addEventListener('click', () => openViewer(groupName, index));
+        });
+      }
+
+      document.addEventListener('keydown', (event) => {
+        if (!(overlay instanceof HTMLElement) || overlay.classList.contains('hidden')) {
+          return;
+        }
+
+        if (event.key === 'Escape') {
+          closeViewer();
+        } else if (event.key === 'ArrowLeft') {
+          event.preventDefault();
+          setViewer(activeGroup, activeViewerIndex - 1);
+        } else if (event.key === 'ArrowRight') {
+          event.preventDefault();
+          setViewer(activeGroup, activeViewerIndex + 1);
+        }
+      });
+
+      setInline(0);
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProjectGalleries, { once: true });
+  } else {
+    initProjectGalleries();
+  }
+</script>

@@ -1,5 +1,11 @@
 ---
 import '../styles/global.css';
+
+interface Props {
+  pageTitle?: string;
+}
+
+const { pageTitle = 'Tanishaa Rao — Portfolio' } = Astro.props;
 ---
 
 <!doctype html>
@@ -9,7 +15,7 @@ import '../styles/global.css';
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Tanishaa Rao — Portfolio</title>
+    <title>{pageTitle}</title>
   </head>
   <body class="min-h-screen bg-paper text-ink antialiased">
     <slot />

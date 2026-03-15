@@ -2,18 +2,31 @@
 import Layout from '../layouts/Layout.astro';
 import NavBar from '../components/NavBar.astro';
 import FooterBand from '../components/FooterBand.astro';
+import WorkIndexItem from '../components/work/WorkIndexItem.astro';
+import { workProjects } from '../data/work';
+
+const projects = [...workProjects].sort((a, b) => a.order - b.order);
 ---
 
-<Layout>
-  <main class="min-h-screen flex flex-col items-center bg-paper text-ink">
-    <NavBar />
-    <section class="flex-1 w-full max-w-4xl px-6 mt-16 text-center">
-      <h1 class="text-sm uppercase tracking-[0.1em]">Work</h1>
-      <p class="mt-6 text-[11px] leading-relaxed">
-        Portfolio pieces coming soon. For now, return to the landing page to view the core profile.
-      </p>
+<Layout pageTitle="Tanishaa Rao — Work">
+  <main class="min-h-screen bg-paper text-ink">
+    <NavBar active="work" />
+
+    <section class="mx-auto mt-[4.5rem] w-full max-w-[1280px] px-8 pb-24">
+      <div class="space-y-[5.5rem]">
+        {projects.map((project) => (
+          <WorkIndexItem
+            href={`/work/${project.slug}`}
+            title={project.title}
+            medium={project.medium}
+            publication={project.publication}
+            summary={project.indexSummary}
+            cover={{ src: project.coverImage, alt: `${project.title} cover image` }}
+          />
+        ))}
+      </div>
     </section>
+
     <FooterBand />
   </main>
 </Layout>
-

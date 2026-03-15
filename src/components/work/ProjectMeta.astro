@@ -1,0 +1,30 @@
+---
+interface Props {
+  title: string;
+  year?: string;
+  medium?: string;
+  publication?: string;
+  summary?: string;
+}
+
+const { title, year, medium, publication, summary } = Astro.props;
+---
+
+<div class="flex flex-col gap-3 text-left items-start">
+  <div class="flex w-full items-start justify-between gap-8">
+    <h1 class="max-w-[16ch] text-[26px] font-semibold uppercase leading-[0.95] tracking-[-0.03em] text-balance">
+      {title}
+    </h1>
+
+    {(year || medium) && (
+      <div class="flex flex-wrap justify-end gap-x-6 gap-y-1 pt-1 font-accent text-[12px] uppercase tracking-[0.18em] text-ink/70">
+        {year && <span>{year}</span>}
+        {medium && <span>{medium}</span>}
+      </div>
+    )}
+  </div>
+
+  {publication && <div class="font-accent text-[13px] uppercase tracking-[0.14em] text-ink/60">{publication}</div>}
+
+  {summary && <p class="max-w-[42ch] text-[13px] leading-[1.55] text-ink/82">{summary}</p>}
+</div>

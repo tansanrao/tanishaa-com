@@ -8,8 +8,11 @@ export default {
         ink: '#1B1A1C',
         accent: '#DA3832',
       },
+      fontFamily: {
+        sans: ['"Schibsted Grotesk"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        accent: ['"Almarai"', 'sans-serif'],
+      },
     },
   },
   plugins: [],
 };
-

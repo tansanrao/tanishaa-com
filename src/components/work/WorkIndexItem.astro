@@ -1,0 +1,45 @@
+---
+interface MediaItem {
+  src: string;
+  alt: string;
+}
+
+interface Props {
+  href: string;
+  title: string;
+  year?: string;
+  medium?: string;
+  publication?: string;
+  summary: string;
+  cover: MediaItem;
+}
+
+const { href, title, year, medium, publication, summary, cover } = Astro.props;
+---
+
+<article class="group grid grid-cols-[1fr_248px_1fr] items-start gap-x-16">
+  <div class="justify-self-end pt-5 text-right">
+    <div class="font-accent text-[12px] uppercase tracking-[0.16em] text-ink/60">{publication ?? 'Selected Work'}</div>
+    {(year || medium) && (
+      <div class="mt-4 flex justify-end gap-6 text-[12px] uppercase tracking-[0.1em] text-ink/72">
+        {year && <span>{year}</span>}
+        {medium && <span>{medium}</span>}
+      </div>
+    )}
+  </div>
+
+  <a href={href} class="focus-visible-outline block">
+    <figure class="overflow-hidden border border-ink/12 bg-[#d9d9d9] transition-transform duration-300 group-hover:-translate-y-1">
+      <img class="h-[164px] w-full object-cover grayscale-[0.1]" src={cover.src} alt={cover.alt} loading="lazy" />
+    </figure>
+  </a>
+
+  <div class="pt-5">
+    <a href={href} class="focus-visible-outline inline-block">
+      <h2 class="max-w-[14ch] text-[28px] font-semibold uppercase leading-[0.95] tracking-[-0.035em] transition-colors group-hover:text-accent">
+        {title}
+      </h2>
+    </a>
+    <p class="mt-3 max-w-[34ch] text-[13px] leading-[1.55] text-ink/82">{summary}</p>
+  </div>
+</article>
