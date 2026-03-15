@@ -41,6 +41,28 @@
 }
 
 @layer utilities {
+  @keyframes ribReveal {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    12% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    72% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+
   .focus-visible-outline:focus-visible {
     outline: 1px solid #DA3832;
     outline-offset: 2px;
@@ -112,5 +134,43 @@
     border-color: rgba(218, 56, 50, 0.9);
     color: #ffffff;
     transform: translateY(-1px);
+  }
+
+  .group:hover .rib-reveal-target {
+    animation: ribReveal 5s ease-out forwards;
+  }
+
+  .work-summary-block {
+    display: -webkit-box;
+    min-height: 4.56rem;
+    max-height: 4.56rem;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+
+  .work-meta-block {
+    display: -webkit-box;
+    min-height: 0.95rem;
+    max-height: 0.95rem;
+    overflow: hidden;
+    line-height: 0.95rem;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .work-meta-block-double {
+    min-height: 1.9rem;
+    max-height: 1.9rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .work-title-block {
+    display: -webkit-box;
+    min-height: 2.25rem;
+    max-height: 2.25rem;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 }

@@ -1,0 +1,82 @@
+---
+import type { WorkProject } from '../../data/work';
+
+interface Props {
+  project?: WorkProject;
+  align: 'left' | 'right';
+}
+
+const { project, align } = Astro.props;
+
+const hoverImage = project
+  ? project.gallery[0] ?? { src: project.coverImage, alt: `${project.title} cover image` }
+  : undefined;
+
+const textAlignClass = align === 'left' ? 'text-right items-end' : 'text-left items-start';
+const layoutClass =
+  align === 'left'
+    ? 'grid-cols-[minmax(0,1fr)_188px]'
+    : 'grid-cols-[188px_minmax(0,1fr)]';
+---
+
+{
+  project ? (
+    <article class:list={['group grid h-[146px] items-center gap-7', layoutClass]}>
+      {align === 'left' ? (
+        <>
+          <a href={`/work/${project.slug}`} class:list={['focus-visible-outline flex h-full flex-col justify-center gap-1.5', textAlignClass]}>
+            {project.publication && (
+              <div class="work-meta-block work-meta-block-double font-accent text-[11px] uppercase tracking-[0.18em] text-ink/58">
+                {project.publication}
+              </div>
+            )}
+
+            {project.medium && (
+              <div class="work-meta-block font-accent text-[11px] uppercase tracking-[0.18em] text-ink/72">{project.medium}</div>
+            )}
+
+            <h2 class="work-title-block max-w-[13ch] text-[19px] font-semibold uppercase leading-[0.94] tracking-[-0.035em] transition-colors group-hover:text-accent">
+              {project.title}
+            </h2>
+
+            <p class="work-summary-block max-w-[29ch] text-[12px] leading-[1.52] text-ink/78">{project.indexSummary}</p>
+          </a>
+
+          <figure class="rib-reveal-target pointer-events-none h-[124px] w-[188px] overflow-hidden bg-[#d8d3ca] opacity-0">
+            {hoverImage && (
+              <img class="h-full w-full object-cover" src={hoverImage.src} alt={hoverImage.alt} loading="lazy" />
+            )}
+          </figure>
+        </>
+      ) : (
+        <>
+          <figure class="rib-reveal-target pointer-events-none h-[124px] w-[188px] overflow-hidden bg-[#d8d3ca] opacity-0">
+            {hoverImage && (
+              <img class="h-full w-full object-cover" src={hoverImage.src} alt={hoverImage.alt} loading="lazy" />
+            )}
+          </figure>
+
+          <a href={`/work/${project.slug}`} class:list={['focus-visible-outline flex h-full flex-col justify-center gap-1.5', textAlignClass]}>
+            {project.publication && (
+              <div class="work-meta-block work-meta-block-double font-accent text-[11px] uppercase tracking-[0.18em] text-ink/58">
+                {project.publication}
+              </div>
+            )}
+
+            {project.medium && (
+              <div class="work-meta-block font-accent text-[11px] uppercase tracking-[0.18em] text-ink/72">{project.medium}</div>
+            )}
+
+            <h2 class="work-title-block max-w-[13ch] text-[19px] font-semibold uppercase leading-[0.94] tracking-[-0.035em] transition-colors group-hover:text-accent">
+              {project.title}
+            </h2>
+
+            <p class="work-summary-block max-w-[29ch] text-[12px] leading-[1.52] text-ink/78">{project.indexSummary}</p>
+          </a>
+        </>
+      )}
+    </article>
+  ) : (
+    <div class="h-[124px]" aria-hidden="true"></div>
+  )
+}

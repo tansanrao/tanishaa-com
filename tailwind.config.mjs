@@ -12,6 +12,17 @@ export default {
         sans: ['"Schibsted Grotesk"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         accent: ['"Almarai"', 'sans-serif'],
       },
+      keyframes: {
+        ribReveal: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '12%': { opacity: '1', transform: 'translateY(0)' },
+          '72%': { opacity: '1', transform: 'translateY(0)' },
+          '100%': { opacity: '0', transform: 'translateY(-4px)' },
+        },
+      },
+      animation: {
+        'rib-reveal': 'ribReveal 5s ease-out forwards',
+      },
     },
   },
   plugins: [],

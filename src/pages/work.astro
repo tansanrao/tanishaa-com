@@ -2,28 +2,57 @@
 import Layout from '../layouts/Layout.astro';
 import NavBar from '../components/NavBar.astro';
 import FooterBand from '../components/FooterBand.astro';
-import WorkIndexItem from '../components/work/WorkIndexItem.astro';
+import RibcageWorkItem from '../components/work/RibcageWorkItem.astro';
 import { workProjects } from '../data/work';
 
 const projects = [...workProjects].sort((a, b) => a.order - b.order);
+const leftProjects = projects.filter((_, index) => index % 2 === 0);
+const rightProjects = projects.filter((_, index) => index % 2 === 1);
+
+const mediaForStrip = (slug: string, galleryIndex = 0) => {
+  const project = projects.find((item) => item.slug === slug);
+  if (!project) {
+    return undefined;
+  }
+
+  return project.gallery[galleryIndex] ?? { src: project.coverImage, alt: `${project.title} cover image` };
+};
+
+const centerStrip = [
+  mediaForStrip('the-wagner', 1),
+  mediaForStrip('herring', 0),
+  mediaForStrip('mount-cuba-center', 0),
+  mediaForStrip('typography', 0),
+  mediaForStrip('woodwork', 1),
+  mediaForStrip('film-photography', 2),
+].filter(Boolean);
 ---
 
 <Layout pageTitle="Tanishaa Rao — Work">
   <main class="min-h-screen bg-paper text-ink">
     <NavBar active="work" />
 
-    <section class="mx-auto mt-[4.5rem] w-full max-w-[1280px] px-8 pb-24">
-      <div class="space-y-[5.5rem]">
-        {projects.map((project) => (
-          <WorkIndexItem
-            href={`/work/${project.slug}`}
-            title={project.title}
-            medium={project.medium}
-            publication={project.publication}
-            summary={project.indexSummary}
-            cover={{ src: project.coverImage, alt: `${project.title} cover image` }}
-          />
-        ))}
+    <section class="mx-auto mt-[3.5rem] w-full max-w-[1400px] px-8 pb-24">
+      <div class="grid grid-cols-[minmax(0,1fr)_152px_minmax(0,1fr)] items-start gap-x-14">
+        <div class="space-y-[4.75rem] pt-4">
+          {leftProjects.map((project) => (
+            <RibcageWorkItem project={project} align="left" />
+          ))}
+        </div>
+
+        <div class="flex flex-col items-center gap-[2.2rem] pt-10">
+          {centerStrip.map((item) => (
+            <figure class="h-[102px] w-[152px] overflow-hidden border border-ink/10 bg-[#dcd7ce]">
+              <img class="h-full w-full object-cover" src={item.src} alt={item.alt} loading="lazy" />
+            </figure>
+          ))}
+        </div>
+
+        <div class="space-y-[4.75rem] pt-4">
+          {rightProjects.map((project) => (
+            <RibcageWorkItem project={project} align="right" />
+          ))}
+        </div>
       </div>
     </section>
 
