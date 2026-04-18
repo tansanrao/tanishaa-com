@@ -1,0 +1,229 @@
+---
+import type { WorkProject } from '../../lib/work';
+
+interface Props {
+  projects: WorkProject[];
+}
+
+interface DenseRibItem {
+  id: string;
+  title: string;
+  href: string;
+  image: WorkProject['listingImage'];
+  metaText: string;
+  summary: string;
+  accessibleLabel: string;
+}
+
+const { projects } = Astro.props as Props;
+
+const STERNUM_FRAME_COUNT = 6;
+
+const toRibItem = (project: WorkProject): DenseRibItem => {
+  const metaText = project.publication ?? project.medium ?? '';
+
+  return {
+    id: project.id,
+    title: project.title,
+    href: `/work/${project.id}`,
+    image: project.listingImage,
+    metaText,
+    summary: project.indexSummary,
+    accessibleLabel: metaText ? `${project.title}, published in ${metaText}` : project.title,
+  };
+};
+
+const sternumFrames = Array.from({ length: STERNUM_FRAME_COUNT }, (_, index) => index);
+
+const leftRibs: DenseRibItem[] = [];
+const rightRibs: DenseRibItem[] = [];
+
+projects.forEach((project, index) => {
+  if (index % 2 === 0) {
+    leftRibs.push(toRibItem(project));
+    return;
+  }
+
+  rightRibs.push(toRibItem(project));
+});
+
+const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.length) }, (_, index) => index);
+---
+
+<main class="min-h-screen bg-paper font-editorial text-ink">
+  <header class="sticky top-0 z-20 bg-paper">
+    <div class="mx-auto flex h-14 w-full max-w-[1360px] items-center justify-between px-6 lg:px-10">
+      <a href="/" class="text-[18px] leading-none no-underline">TANISHAA RAO</a>
+
+      <nav class="flex items-center gap-12" aria-label="Primary">
+        <a href="/work" class="text-[18px] leading-none text-accent no-underline" aria-current="page">WORK</a>
+        <a href="/contact" class="text-[18px] leading-none no-underline">CONTACT</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="mx-auto w-full max-w-[1360px] px-6 pb-24 pt-12 lg:px-10">
+    <div class="grid items-start justify-center gap-x-10 [grid-template-columns:minmax(24rem,31rem)_5.75rem_minmax(24rem,31rem)]">
+      <div class="flex w-full flex-col gap-y-18 justify-self-end">
+        {rowIndexes.map((rowIndex) => {
+          const rib = leftRibs[rowIndex];
+
+          return (
+            <div class="w-full">
+              {rib && (
+                <a
+                  href={rib.href}
+                  class="grid w-full cursor-default grid-cols-[minmax(0,1fr)_8.5rem] grid-rows-[auto_auto] items-start gap-x-7 gap-y-4 text-ink no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-accent focus-visible:outline-offset-2"
+                  aria-label={rib.accessibleLabel}
+                  data-work-rib
+                  data-rib-id={`${rib.id}-left`}
+                >
+                  <span class="col-start-1 row-start-2 flex min-w-0 flex-col pt-1 text-right">
+                    <span class="flex items-start justify-between gap-9">
+                      <span class="min-w-[8rem] truncate pt-0.5 text-right text-[15px] font-light leading-none text-ink/72">
+                        {rib.metaText}
+                      </span>
+                      <span class="max-w-[12.5rem] line-clamp-2 text-[16px] font-medium leading-[1.15]">{rib.title}</span>
+                    </span>
+                    <span class="mt-5 w-full line-clamp-3 text-[13px] leading-[1.4] text-ink/90">{rib.summary}</span>
+                  </span>
+
+                  <span class="col-start-2 row-start-1 block aspect-[122/73] w-[8.5rem] overflow-hidden" aria-hidden="true">
+                    <img
+                      class="h-full w-full object-cover opacity-0 transition-opacity duration-[650ms] ease-out motion-reduce:transition-none"
+                      src={rib.image.src}
+                      alt=""
+                      width="136"
+                      height="81"
+                      loading="lazy"
+                      data-rib-image
+                    />
+                  </span>
+                </a>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div class="pointer-events-none flex w-[5.75rem] flex-col gap-y-3" aria-hidden="true">
+        {sternumFrames.map((frame) => (
+          <div
+            class="flex h-[3.75rem] items-center justify-center border border-dashed border-black/25 bg-black/10 text-[9px] uppercase tracking-[0.18em] text-black/55"
+            data-sternum-frame={frame}
+          >
+            ILLUSTRATION
+          </div>
+        ))}
+      </div>
+
+      <div class="flex w-full flex-col gap-y-18 justify-self-start">
+        {rowIndexes.map((rowIndex) => {
+          const rib = rightRibs[rowIndex];
+
+          return (
+            <div class="w-full">
+              {rib && (
+                <a
+                  href={rib.href}
+                  class="grid w-full cursor-default grid-cols-[8.5rem_minmax(0,1fr)] grid-rows-[auto_auto] items-start gap-x-7 gap-y-4 text-ink no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-accent focus-visible:outline-offset-2"
+                  aria-label={rib.accessibleLabel}
+                  data-work-rib
+                  data-rib-id={`${rib.id}-right`}
+                >
+                  <span class="col-start-1 row-start-1 block aspect-[122/73] w-[8.5rem] overflow-hidden" aria-hidden="true">
+                    <img
+                      class="h-full w-full object-cover opacity-0 transition-opacity duration-[650ms] ease-out motion-reduce:transition-none"
+                      src={rib.image.src}
+                      alt=""
+                      width="136"
+                      height="81"
+                      loading="lazy"
+                      data-rib-image
+                    />
+                  </span>
+
+                  <span class="col-start-2 row-start-2 flex min-w-0 flex-col pt-1 text-left">
+                    <span class="flex items-start justify-between gap-9">
+                      <span class="max-w-[12.5rem] line-clamp-2 text-[16px] font-medium leading-[1.15]">{rib.title}</span>
+                      <span class="min-w-[8rem] truncate pt-0.5 text-left text-[15px] font-light leading-none text-ink/72">
+                        {rib.metaText}
+                      </span>
+                    </span>
+                    <span class="mt-5 w-full line-clamp-3 text-[13px] leading-[1.4] text-ink/90">{rib.summary}</span>
+                  </span>
+                </a>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  const initDenseWorkIndex = () => {
+    const ribs = document.querySelectorAll('[data-work-rib]');
+    const timers = new Map<HTMLElement, number>();
+
+    const clearTimer = (rib: HTMLElement) => {
+      const timer = timers.get(rib);
+      if (timer !== undefined) {
+        window.clearTimeout(timer);
+        timers.delete(rib);
+      }
+    };
+
+    const setVisible = (rib: HTMLElement, visible: boolean) => {
+      const image = rib.querySelector('[data-rib-image]');
+      if (!(image instanceof HTMLElement)) {
+        return;
+      }
+
+      image.classList.toggle('opacity-100', visible);
+    };
+
+    const reveal = (rib: HTMLElement) => {
+      setVisible(rib, true);
+      clearTimer(rib);
+      const timer = window.setTimeout(() => {
+        setVisible(rib, false);
+        timers.delete(rib);
+      }, 5000);
+      timers.set(rib, timer);
+    };
+
+    const hide = (rib: HTMLElement) => {
+      clearTimer(rib);
+      setVisible(rib, false);
+    };
+
+    ribs.forEach((rib) => {
+      if (!(rib instanceof HTMLElement) || rib.dataset.bound === 'true') {
+        return;
+      }
+
+      rib.dataset.bound = 'true';
+      rib.addEventListener('mouseenter', () => reveal(rib));
+      rib.addEventListener('focus', () => reveal(rib));
+      rib.addEventListener('blur', () => hide(rib));
+      rib.addEventListener('touchstart', () => reveal(rib), { passive: true });
+    });
+
+    window.addEventListener(
+      'pagehide',
+      () => {
+        timers.forEach((timer) => window.clearTimeout(timer));
+        timers.clear();
+      },
+      { once: true }
+    );
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDenseWorkIndex, { once: true });
+  } else {
+    initDenseWorkIndex();
+  }
+</script>

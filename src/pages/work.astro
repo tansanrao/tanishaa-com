@@ -1,50 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import NavBar from '../components/NavBar.astro';
-import FooterBand from '../components/FooterBand.astro';
+import WorkDenseIndex from '../components/work/WorkDenseIndex.astro';
 import { getWorkProjects } from '../lib/work';
 
 const projects = await getWorkProjects();
 ---
 
 <Layout pageTitle="Tanishaa Rao — Work">
-  <main class="min-h-screen bg-paper text-ink">
-    <NavBar active="work" />
-
-    <section class="mx-auto mt-10 w-full max-w-[1280px] px-6 pb-24 sm:px-8">
-      <div class="space-y-10 md:space-y-12">
-        {projects.map((project) => (
-          <article class="border-t border-ink/12 pt-8 md:pt-10">
-            <a href={`/work/${project.id}`} class="group block focus-visible-outline">
-              <div class="grid gap-5 md:grid-cols-[minmax(0,1fr)_180px] md:items-start lg:grid-cols-[minmax(0,1.1fr)_180px_minmax(240px,0.9fr)] lg:gap-10">
-                <div class="order-2 flex flex-col gap-3 md:order-1">
-                  <div class="flex flex-wrap items-center gap-x-6 gap-y-1 font-accent text-[11px] uppercase tracking-[0.18em] text-ink/58">
-                    <span>{String(project.order).padStart(2, '0')}</span>
-                    {project.medium && <span>{project.medium}</span>}
-                  </div>
-                  <p class="max-w-[34ch] text-[12px] leading-[1.6] text-ink/76">{project.indexSummary}</p>
-                </div>
-
-                <figure class="order-1 h-[112px] w-full overflow-hidden border border-ink/10 bg-[#ddd6c8] md:order-2 md:w-[180px]">
-                  <img class="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]" src={project.listingImage.src} alt={project.listingImage.alt} loading="lazy" />
-                </figure>
-
-                <div class="order-3 flex flex-col gap-2 md:pt-1 lg:items-end lg:text-right">
-                  {project.publication && (
-                    <div class="font-accent text-[11px] uppercase tracking-[0.18em] text-ink/60">{project.publication}</div>
-                  )}
-                  <h2 class="max-w-[14ch] text-balance text-[clamp(1.25rem,2vw,2rem)] font-semibold leading-[0.94] tracking-[-0.04em] transition-colors group-hover:text-accent">
-                    {project.title}
-                  </h2>
-                  <div class="font-accent text-[11px] uppercase tracking-[0.18em] text-ink/58">{project.year}</div>
-                </div>
-              </div>
-            </a>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <FooterBand />
-  </main>
+  <WorkDenseIndex projects={projects} />
 </Layout>

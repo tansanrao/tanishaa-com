@@ -11,6 +11,7 @@ export default {
       fontFamily: {
         sans: ['"Schibsted Grotesk"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         accent: ['"Almarai"', 'sans-serif'],
+        editorial: ['"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
       },
       keyframes: {
         ribReveal: {
