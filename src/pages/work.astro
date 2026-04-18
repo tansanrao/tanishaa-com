@@ -25,7 +25,7 @@ const centerStrip = [
   mediaForStrip('typography', 0),
   mediaForStrip('woodwork', 1),
   mediaForStrip('film-photography', 2),
-].filter(Boolean);
+].filter((item): item is NonNullable<ReturnType<typeof mediaForStrip>> => Boolean(item));
 ---
 
 <Layout pageTitle="Tanishaa Rao — Work">

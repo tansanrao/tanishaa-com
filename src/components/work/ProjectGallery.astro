@@ -16,7 +16,7 @@ const { gallery, title, viewerId, viewerGroups = { main: gallery } } = Astro.pro
 ---
 
 <section class="grid grid-cols-[minmax(0,1fr)_120px] gap-12" data-project-gallery data-viewer-id={viewerId}>
-  <script type="application/json" data-viewer-groups set:html={JSON.stringify(viewerGroups)} />
+  <script is:inline type="application/json" data-viewer-groups set:html={JSON.stringify(viewerGroups)} />
 
   <div class="space-y-4">
     <div class="relative overflow-hidden border border-ink/12 bg-[#0f0f10]">
@@ -134,6 +134,9 @@ const { gallery, title, viewerId, viewerGroups = { main: gallery } } = Astro.pro
 
 <script>
   const initProjectGalleries = () => {
+    type ViewerItem = { src: string; alt: string; caption?: string };
+    type ViewerGroups = Record<string, ViewerItem[]>;
+
     const galleries = document.querySelectorAll('[data-project-gallery]');
 
     galleries.forEach((galleryRoot) => {
@@ -168,9 +171,11 @@ const { gallery, title, viewerId, viewerGroups = { main: gallery } } = Astro.pro
       let activeGroup = 'main';
       let activeViewerIndex = 0;
 
-      const wrapIndex = (index, length) => (index + length) % length;
+      const typedGroups: ViewerGroups = groups;
 
-      const setInline = (nextIndex) => {
+      const wrapIndex = (index: number, length: number) => (index + length) % length;
+
+      const setInline = (nextIndex: number) => {
         if (!slides.length) {
           return;
         }
@@ -194,10 +199,10 @@ const { gallery, title, viewerId, viewerGroups = { main: gallery } } = Astro.pro
         }
       };
 
-      const getActiveItems = () => groups[activeGroup] ?? [];
+      const getActiveItems = () => typedGroups[activeGroup] ?? [];
 
-      const setViewer = (groupName, nextIndex) => {
-        const items = groups[groupName] ?? [];
+      const setViewer = (groupName: string, nextIndex: number) => {
+        const items = typedGroups[groupName] ?? [];
         if (!items.length || !(overlay instanceof HTMLElement) || !(viewerImage instanceof HTMLImageElement)) {
           return;
         }
@@ -205,6 +210,9 @@ const { gallery, title, viewerId, viewerGroups = { main: gallery } } = Astro.pro
         activeGroup = groupName;
         activeViewerIndex = wrapIndex(nextIndex, items.length);
         const current = items[activeViewerIndex];
+        if (!current) {
+          return;
+        }
 
         viewerImage.src = current.src;
         viewerImage.alt = current.alt ?? '';
@@ -218,7 +226,7 @@ const { gallery, title, viewerId, viewerGroups = { main: gallery } } = Astro.pro
         }
       };
 
-      const openViewer = (groupName, nextIndex) => {
+      const openViewer = (groupName: string, nextIndex: number) => {
         if (!(overlay instanceof HTMLElement)) {
           return;
         }
