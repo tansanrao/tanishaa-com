@@ -140,23 +140,34 @@
     animation: ribReveal 5s ease-out forwards;
   }
 
+  .work-rib-copy {
+    min-height: 6.9625rem;
+    max-height: 6.9625rem;
+  }
+
+  .work-rib-header {
+    min-height: 2.3rem;
+    max-height: 2.3rem;
+  }
+
   .work-summary-block {
     display: -webkit-box;
-    min-height: 4.56rem;
-    max-height: 4.56rem;
+    min-height: 3.4125rem;
+    max-height: 3.4125rem;
     overflow: hidden;
+    line-height: 1.1375rem;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 3;
   }
 
   .work-meta-block {
-    display: -webkit-box;
-    min-height: 0.95rem;
-    max-height: 0.95rem;
+    display: block;
+    min-height: 1.1rem;
+    max-height: 1.1rem;
     overflow: hidden;
-    line-height: 0.95rem;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
+    line-height: 1.1rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .work-meta-block-double {
@@ -167,8 +178,8 @@
 
   .work-title-block {
     display: -webkit-box;
-    min-height: 2.25rem;
-    max-height: 2.25rem;
+    min-height: 2.3rem;
+    max-height: 2.3rem;
     overflow: hidden;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
