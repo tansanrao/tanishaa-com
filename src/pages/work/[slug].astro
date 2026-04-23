@@ -2,6 +2,9 @@
 import Layout from '../../layouts/Layout.astro';
 import NavBar from '../../components/NavBar.astro';
 import FooterBand from '../../components/FooterBand.astro';
+import ProjectGallery from '../../components/work/ProjectGallery.astro';
+import ProcessGallery from '../../components/work/ProcessGallery.astro';
+import ProjectMeta from '../../components/work/ProjectMeta.astro';
 import { getWorkProjects, type WorkProject } from '../../lib/work';
 
 export async function getStaticPaths() {
@@ -14,8 +17,6 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props as { project: WorkProject };
-const heroImage = project.mainGallery[0] ?? project.listingImage;
-const supportingImages = project.mainGallery.slice(1, 4);
 const processGallery = project.processGallery.length ? project.processGallery : project.mainGallery.slice(1, 5);
 ---
 
@@ -23,67 +24,46 @@ const processGallery = project.processGallery.length ? project.processGallery : 
   <main class="min-h-screen bg-paper text-ink">
     <NavBar active="work" />
 
-    <section class="mx-auto mt-10 w-full max-w-[1280px] px-6 pb-24 sm:px-8">
-      <div class="mb-8">
+    <section class="mx-auto mt-10 w-full max-w-[1280px] px-6 pb-24 sm:px-8 lg:pb-28">
+      <div class="mb-8 lg:mb-10">
         <a href="/work" class="focus-visible-outline font-accent text-[12px] uppercase tracking-[0.18em] text-ink/60 transition hover:text-accent">
           Back to Work
         </a>
       </div>
 
-      <div class="mx-auto max-w-[1180px]">
-        <h1 class="text-balance text-center text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[0.92] tracking-[-0.06em]">
+      <div class="lg:grid lg:grid-cols-12 lg:gap-x-8 xl:gap-x-10">
+        <h1 class="text-[clamp(2.6rem,7vw,5.4rem)] font-semibold leading-[0.92] tracking-[-0.065em] lg:col-span-12">
           {project.title}
         </h1>
 
-        <div class="mt-10 grid gap-4 lg:grid-cols-[minmax(0,1.85fr)_minmax(130px,0.7fr)_minmax(240px,0.9fr)] lg:items-start">
-          <figure class="overflow-hidden border border-ink/10 bg-[#ddd6c8]">
-            <img class="aspect-[16/11] h-full w-full object-cover" src={heroImage.src} alt={heroImage.alt} />
-          </figure>
-
-          <div class="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-            {supportingImages.map((item) => (
-              <figure class="overflow-hidden border border-ink/10 bg-[#ddd6c8]">
-                <img class="aspect-[4/5] h-full w-full object-cover" src={item.src} alt={item.alt} loading="lazy" />
-              </figure>
-            ))}
-          </div>
-
-          <aside class="space-y-5 lg:pl-2">
-            <div class="flex flex-wrap gap-x-5 gap-y-2 font-accent text-[11px] uppercase tracking-[0.18em] text-ink/60">
-              <span>{project.year}</span>
-              {project.medium && <span>{project.medium}</span>}
-              {project.publication && <span>{project.publication}</span>}
-            </div>
-
-            <p class="max-w-[34ch] text-[13px] leading-[1.65] text-ink/82">{project.detailSummary}</p>
-          </aside>
+        <div class="mt-9 lg:col-span-8">
+          <ProjectGallery gallery={project.mainGallery} title={project.title} />
         </div>
 
-        {project.mainGallery.length > 1 && (
-          <div class="mt-6 flex gap-3 overflow-x-auto pb-2">
-            {project.mainGallery.map((item) => (
-              <figure class="h-[82px] min-w-[112px] overflow-hidden border border-ink/10 bg-[#ddd6c8]">
-                <img class="h-full w-full object-cover" src={item.src} alt={item.alt} loading="lazy" />
-              </figure>
-            ))}
-          </div>
-        )}
+        <div class="mt-7 lg:col-span-8">
+          <ProjectMeta
+            title={project.title}
+            year={project.year}
+            medium={project.medium}
+            publication={project.publication}
+            summary={project.detailSummary}
+          />
+        </div>
 
         {project.overviewHtml && (
-          <section class="mt-12 max-w-[720px]">
+          <section class="mt-12 lg:col-span-8">
             <div class="rich-copy text-[14px] leading-[1.75] text-ink/82" set:html={project.overviewHtml} />
           </section>
         )}
 
-        <section class="mt-20 grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(220px,300px)] lg:gap-16">
-          <div class="order-2 lg:order-1">
-            <div class="mb-5 flex items-end justify-between gap-6">
-              <p class="max-w-[42ch] font-accent text-[12px] uppercase tracking-[0.16em] text-ink/54">
-                Sketches, systems, and iterations behind the final project.
-              </p>
-              <h2 class="text-[clamp(1.75rem,3vw,2.75rem)] font-semibold leading-none tracking-[-0.05em]">Process</h2>
-            </div>
+        <section class="work-process-section mt-24 lg:col-span-12">
+          <div class="work-process-heading-row">
+            <h2 class="work-process-heading text-[clamp(2rem,5vw,3.2rem)] font-semibold leading-none tracking-[-0.05em]">
+              Process
+            </h2>
+          </div>
 
+          <div class="work-process-copy">
             {project.processHtml ? (
               <div class="rich-copy text-[14px] leading-[1.75] text-ink/82" set:html={project.processHtml} />
             ) : (
@@ -91,12 +71,8 @@ const processGallery = project.processGallery.length ? project.processGallery : 
             )}
           </div>
 
-          <div class="order-1 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:order-2 lg:grid-cols-1">
-            {processGallery.map((item) => (
-              <figure class="overflow-hidden border border-ink/10 bg-[#ddd6c8]">
-                <img class="aspect-[4/5] h-full w-full object-cover" src={item.src} alt={item.alt} loading="lazy" />
-              </figure>
-            ))}
+          <div class="work-process-gallery-wrap">
+            <ProcessGallery gallery={processGallery} title={project.title} />
           </div>
         </section>
       </div>

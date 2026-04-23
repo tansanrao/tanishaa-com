@@ -17,12 +17,10 @@ const { gallery, title } = Astro.props;
 
 <MediaGallery
   gallery={gallery}
-  title={title}
-  layout="filmstrip"
-  stageAspect="3 / 2"
-  thumbAspect="3 / 2"
-  itemAspect="3 / 2"
-  showInlineCaption={true}
-  showInlineControls={true}
-  showFullscreenButton={true}
+  title={`${title} process`}
+  layout="stack"
+  itemAspect="4 / 3"
+  showInlineCaption={false}
+  showInlineControls={false}
+  showFullscreenButton={false}
 />

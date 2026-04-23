@@ -10,21 +10,34 @@ interface Props {
 const { title, year, medium, publication, summary } = Astro.props;
 ---
 
-<div class="flex flex-col gap-3 text-left items-start">
-  <div class="flex w-full items-start justify-between gap-8">
-    <h1 class="max-w-[16ch] text-[26px] font-semibold uppercase leading-[0.95] tracking-[-0.03em] text-balance">
-      {title}
-    </h1>
+<section class="space-y-8">
+  <div class="grid gap-4 border-t border-ink/12 pt-5 text-left sm:grid-cols-[minmax(0,1.5fr)_repeat(2,minmax(0,1fr))] sm:gap-6 lg:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))]">
+    <div class="space-y-1">
+      <div class="font-accent text-[11px] uppercase tracking-[0.18em] text-ink/48">Project</div>
+      <div class="text-[14px] leading-[1.45] text-ink">{title}</div>
+    </div>
 
-    {(year || medium) && (
-      <div class="flex flex-wrap justify-end gap-x-6 gap-y-1 pt-1 font-accent text-[12px] uppercase tracking-[0.18em] text-ink/70">
-        {year && <span>{year}</span>}
-        {medium && <span>{medium}</span>}
+    {year && (
+      <div class="space-y-1">
+        <div class="font-accent text-[11px] uppercase tracking-[0.18em] text-ink/48">Year</div>
+        <div class="text-[14px] leading-[1.45] text-ink">{year}</div>
+      </div>
+    )}
+
+    {medium && (
+      <div class="space-y-1">
+        <div class="font-accent text-[11px] uppercase tracking-[0.18em] text-ink/48">Medium</div>
+        <div class="text-[14px] leading-[1.45] text-ink">{medium}</div>
+      </div>
+    )}
+
+    {publication && (
+      <div class="space-y-1">
+        <div class="font-accent text-[11px] uppercase tracking-[0.18em] text-ink/48">Client</div>
+        <div class="text-[14px] leading-[1.45] text-ink">{publication}</div>
       </div>
     )}
   </div>
 
-  {publication && <div class="font-accent text-[13px] uppercase tracking-[0.14em] text-ink/60">{publication}</div>}
-
-  {summary && <p class="max-w-[42ch] text-[13px] leading-[1.55] text-ink/82">{summary}</p>}
-</div>
+  {summary && <p class="max-w-[46ch] text-[16px] leading-[1.58] text-ink/84">{summary}</p>}
+</section>
