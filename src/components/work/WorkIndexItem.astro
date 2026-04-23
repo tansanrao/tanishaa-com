@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
+
 interface MediaItem {
-  src: string;
+  image: ImageMetadata;
   alt: string;
 }
 
@@ -23,7 +25,7 @@ const { href, title, medium, summary, cover } = Astro.props as Props;
 const resolvedTitle = normalizeText(title) || UNTITLED_PROJECT;
 const resolvedMedium = normalizeText(medium) || MEDIUM_PLACEHOLDER;
 const resolvedSummary = normalizeText(summary) || SUMMARY_PLACEHOLDER;
-const hasCover = Boolean(cover?.src);
+const hasCover = Boolean(cover?.image);
 ---
 
 <article class="group grid grid-cols-[1fr_248px_1fr] items-start gap-x-16">
@@ -34,7 +36,17 @@ const hasCover = Boolean(cover?.src);
   <a href={href} class="focus-visible-outline block">
     <figure class="overflow-hidden border border-ink/12 bg-[#d9d9d9] transition-transform duration-300 group-hover:-translate-y-1">
       {hasCover ? (
-        <img class="h-[164px] w-full object-cover grayscale-[0.1]" src={cover!.src} alt={cover!.alt} loading="lazy" />
+        <Image
+          class="h-[164px] w-full object-cover grayscale-[0.1]"
+          src={cover!.image}
+          alt={cover!.alt}
+          width="248"
+          height="164"
+          densities={[1, 2]}
+          fit="cover"
+          position="center"
+          loading="lazy"
+        />
       ) : (
         <div class="flex h-[164px] w-full items-center justify-center text-[10px] uppercase tracking-[0.18em] text-ink/45">
           {COVER_PLACEHOLDER}

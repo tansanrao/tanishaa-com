@@ -1,3 +1,4 @@
+import { getImage } from 'astro:assets';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { unified } from 'unified';
 import rehypeStringify from 'rehype-stringify';
@@ -6,12 +7,17 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 
 type WorkEntry = CollectionEntry<'work'>;
-type ImageLike = string | { src: string };
+type WorkImage = WorkEntry['data']['listingImage']['src'];
+type WorkMediaEntry = WorkEntry['data']['mainGallery'][number];
+type ViewerTransform = Awaited<ReturnType<typeof getImage>>;
 
 export interface WorkMedia {
-  src: string;
+  image: WorkImage;
   alt: string;
   caption?: string;
+  viewerSrc: string;
+  viewerWidth: number;
+  viewerHeight: number;
 }
 
 export interface WorkProject {
@@ -32,13 +38,43 @@ export interface WorkProject {
 
 const markdownProcessor = unified().use(remarkParse).use(remarkGfm).use(remarkRehype).use(rehypeStringify);
 
-const toImageSrc = (value: ImageLike) => (typeof value === 'string' ? value : value.src);
-
-const toMedia = (item: { src: ImageLike; alt: string; caption?: string }): WorkMedia => ({
-  src: toImageSrc(item.src),
-  alt: item.alt,
-  caption: item.caption,
+const toViewerDimensions = (viewer: ViewerTransform) => ({
+  viewerWidth: Number(viewer.attributes.width ?? 0),
+  viewerHeight: Number(viewer.attributes.height ?? 0),
 });
+
+const toMedia = async (item: WorkMediaEntry): Promise<WorkMedia> => {
+  const viewer = await getImage({
+    src: item.src,
+    format: 'webp',
+    width: Math.min(item.src.width, 1600),
+    quality: 'high',
+  });
+
+  return {
+    image: item.src,
+    alt: item.alt,
+    caption: item.caption,
+    viewerSrc: viewer.src,
+    ...toViewerDimensions(viewer),
+  };
+};
+
+const toListingMedia = async (item: WorkEntry['data']['listingImage']): Promise<WorkMedia> => {
+  const viewer = await getImage({
+    src: item.src,
+    format: 'webp',
+    width: Math.min(item.src.width, 1600),
+    quality: 'high',
+  });
+
+  return {
+    image: item.src,
+  alt: item.alt,
+    viewerSrc: viewer.src,
+    ...toViewerDimensions(viewer),
+  };
+};
 
 const splitMarkdownSections = (body: string) => {
   const normalized = body.replace(/\r\n/g, '\n').trim();
@@ -89,9 +125,12 @@ const renderMarkdown = async (markdown: string) => {
 
 const normalizeWorkEntry = async (entry: WorkEntry): Promise<WorkProject> => {
   const sections = splitMarkdownSections(entry.body ?? '');
-  const [overviewHtml, processHtml] = await Promise.all([
+  const [overviewHtml, processHtml, listingImage, mainGallery, processGallery] = await Promise.all([
     renderMarkdown(sections.overview),
     renderMarkdown(sections.process),
+    toListingMedia(entry.data.listingImage),
+    Promise.all(entry.data.mainGallery.map(toMedia)),
+    Promise.all(entry.data.processGallery.map(toMedia)),
   ]);
 
   return {
@@ -103,9 +142,9 @@ const normalizeWorkEntry = async (entry: WorkEntry): Promise<WorkProject> => {
     publication: entry.data.publication,
     indexSummary: entry.data.indexSummary,
     detailSummary: entry.data.detailSummary,
-    listingImage: toMedia(entry.data.listingImage),
-    mainGallery: entry.data.mainGallery.map(toMedia),
-    processGallery: entry.data.processGallery.map(toMedia),
+    listingImage,
+    mainGallery,
+    processGallery,
     overviewHtml,
     processHtml,
   };

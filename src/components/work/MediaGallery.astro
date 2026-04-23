@@ -1,12 +1,9 @@
 ---
-interface GalleryItem {
-  src: string;
-  alt: string;
-  caption?: string;
-}
+import { Image, Picture } from 'astro:assets';
+import type { WorkMedia } from '../../lib/work';
 
 interface Props {
-  gallery: GalleryItem[];
+  gallery: WorkMedia[];
   title: string;
   layout?: 'filmstrip' | 'stack';
   stageAspect?: string;
@@ -27,10 +24,21 @@ const {
   showInlineCaption = layout === 'filmstrip',
   showInlineControls = layout === 'filmstrip',
   showFullscreenButton = layout === 'filmstrip',
-} = Astro.props;
+} = Astro.props as Props;
 
 const hasMultipleImages = gallery.length > 1;
 const isFilmstrip = layout === 'filmstrip';
+const viewerItems = gallery.map((item) => ({
+  src: item.viewerSrc,
+  alt: item.alt,
+  caption: item.caption,
+  width: item.viewerWidth,
+  height: item.viewerHeight,
+}));
+const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
+  const widths = [...new Set(candidates.filter((width) => width < maxWidth).concat(maxWidth))];
+  return widths.sort((left, right) => left - right);
+};
 ---
 
 <section
@@ -40,7 +48,7 @@ const isFilmstrip = layout === 'filmstrip';
   style={`--gallery-stage-aspect:${stageAspect}; --gallery-thumb-aspect:${thumbAspect}; --gallery-item-aspect:${itemAspect};`}
   data-media-gallery
 >
-  <script is:inline type="application/json" data-gallery-items set:html={JSON.stringify(gallery)} />
+  <script is:inline type="application/json" data-gallery-items set:html={JSON.stringify(viewerItems)} />
 
   {isFilmstrip ? (
     <>
@@ -53,17 +61,30 @@ const isFilmstrip = layout === 'filmstrip';
             aria-label={`Open ${title} gallery in fullscreen`}
           >
             {gallery.map((item, index) => (
-              <img
+              <div
                 class:list={[
-                  'project-gallery-slide h-full w-full object-contain',
+                  'project-gallery-slide h-full w-full',
                   index === 0 ? 'block' : 'hidden',
                 ]}
                 data-gallery-slide
                 data-index={index}
-                data-caption={item.caption ?? item.alt}
-                src={item.src}
-                alt={item.alt}
-              />
+              >
+                <Picture
+                  src={item.image}
+                  alt={item.alt}
+                  formats={['avif', 'webp']}
+                  width={Math.min(item.image.width, 1400)}
+                  widths={getResponsiveWidths(Math.min(item.image.width, 1400), [480, 960])}
+                  sizes="(min-width: 1024px) 900px, 100vw"
+                  layout="constrained"
+                  quality="high"
+                  fit="contain"
+                  position="center"
+                  priority={index === 0}
+                  class="h-full w-full object-contain"
+                  pictureAttributes={{ class: 'h-full w-full' }}
+                />
+              </div>
             ))}
           </button>
 
@@ -128,7 +149,17 @@ const isFilmstrip = layout === 'filmstrip';
                 aria-label={`View image ${index + 1} for ${title}`}
                 aria-pressed={index === 0 ? 'true' : 'false'}
               >
-                <img class="h-full w-full object-cover object-center" src={item.src} alt="" loading="lazy" />
+                <Image
+                  class="h-full w-full object-cover object-center"
+                  src={item.image}
+                  alt=""
+                  width={192}
+                  height={128}
+                  quality="mid"
+                  fit="cover"
+                  position="center"
+                  loading="lazy"
+                />
               </button>
             ))}
           </div>
@@ -145,11 +176,19 @@ const isFilmstrip = layout === 'filmstrip';
           data-index={index}
           aria-label={`Open ${title} image ${index + 1} in fullscreen`}
         >
-          <img
-            class="h-full w-full object-cover object-center"
-            src={item.src}
+          <Picture
+            src={item.image}
             alt={item.alt}
-            data-caption={item.caption ?? item.alt}
+            formats={['avif', 'webp']}
+            width={Math.min(item.image.width, 640)}
+            widths={getResponsiveWidths(Math.min(item.image.width, 640), [320])}
+            sizes="(min-width: 1024px) 100vw, (min-width: 640px) 33vw, 50vw"
+            layout="constrained"
+            quality="high"
+            fit="cover"
+            position="center"
+            class="h-full w-full object-cover object-center"
+            pictureAttributes={{ class: 'h-full w-full' }}
             loading="lazy"
           />
         </button>
@@ -203,7 +242,7 @@ const isFilmstrip = layout === 'filmstrip';
 
 <script>
   const initMediaGalleries = () => {
-    type ViewerItem = { src: string; alt: string; caption?: string };
+    type ViewerItem = { src: string; alt: string; caption?: string; width?: number; height?: number };
 
     const galleries = document.querySelectorAll('[data-media-gallery]');
 
@@ -293,6 +332,14 @@ const isFilmstrip = layout === 'filmstrip';
 
         viewerImage.src = current.src;
         viewerImage.alt = current.alt ?? '';
+
+        if (typeof current.width === 'number' && current.width > 0) {
+          viewerImage.width = current.width;
+        }
+
+        if (typeof current.height === 'number' && current.height > 0) {
+          viewerImage.height = current.height;
+        }
 
         if (viewerCaption instanceof HTMLElement) {
           viewerCaption.textContent = current.caption ?? current.alt ?? '';

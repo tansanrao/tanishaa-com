@@ -1,18 +1,13 @@
 ---
+import type { WorkMedia } from '../../lib/work';
 import MediaGallery from './MediaGallery.astro';
 
-interface GalleryItem {
-  src: string;
-  alt: string;
-  caption?: string;
-}
-
 interface Props {
-  gallery: GalleryItem[];
+  gallery: WorkMedia[];
   title: string;
 }
 
-const { gallery, title } = Astro.props;
+const { gallery, title } = Astro.props as Props;
 ---
 
 <MediaGallery
