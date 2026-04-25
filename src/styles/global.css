@@ -76,6 +76,43 @@
     text-wrap: balance;
   }
 
+  .body-copy-justify {
+    display: block;
+    inline-size: min(100%, var(--body-copy-inline-size, clamp(18rem, 58vw, 46rem)));
+    text-align: justify;
+    text-align-last: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+    overflow-wrap: break-word;
+  }
+
+  .body-copy-wide {
+    --body-copy-inline-size: clamp(18rem, 84vw, 68rem);
+  }
+
+  .body-copy-hero {
+    --body-copy-inline-size: min(100vw, 32.5rem);
+  }
+
+  .body-copy-project {
+    --body-copy-inline-size: clamp(18rem, 56vw, 43rem);
+  }
+
+  .body-copy-index {
+    --body-copy-inline-size: clamp(12rem, 20vw, 21rem);
+  }
+
+  .body-copy-justify.rich-copy {
+    max-inline-size: min(100%, var(--body-copy-inline-size, clamp(18rem, 58vw, 46rem)));
+  }
+
+  .body-copy-justify.rich-copy h2,
+  .body-copy-justify.rich-copy h3,
+  .body-copy-justify.rich-copy h4 {
+    text-align: left;
+    text-align-last: auto;
+  }
+
   .rich-copy > :first-child {
     margin-top: 0;
   }

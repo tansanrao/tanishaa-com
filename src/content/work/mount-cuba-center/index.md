@@ -3,7 +3,6 @@ title: "Mt. Cuba Center"
 order: 3
 year: "2024"
 medium: "Corporate Identity"
-publication: "Mt. Cuba Center"
 indexSummary: "A refreshed identity for Mt. Cuba Center that translates native plant research and conservation into a clear, contemporary system across print, digital, and on-site touchpoints."
 detailSummary: "Visual identity for Mt. Cuba Center that reflects its mission as a native plant garden and conservation institution. The system balances natural elegance with clarity and structure so it can feel educational, welcoming, and consistent across every application."
 listingImage:

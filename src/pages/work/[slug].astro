@@ -26,7 +26,8 @@ const processGallery = project.processGallery.length ? project.processGallery : 
 
     <section class="mx-auto mt-10 w-full max-w-[1280px] px-6 pb-24 sm:px-8 lg:pb-28">
       <div class="mb-8 lg:mb-10">
-        <a href="/work" class="focus-visible-outline font-accent text-[12px] uppercase tracking-[0.18em] text-ink/60 transition hover:text-accent">
+        <a href="/work" class="focus-visible-outline inline-flex items-center gap-2 font-accent text-[12px] uppercase tracking-[0.18em] text-ink/60 transition hover:text-accent">
+          <span aria-hidden="true">&larr;</span>
           Back to Work
         </a>
       </div>
@@ -45,14 +46,12 @@ const processGallery = project.processGallery.length ? project.processGallery : 
             title={project.title}
             year={project.year}
             medium={project.medium}
-            publication={project.publication}
-            summary={project.detailSummary}
           />
         </div>
 
         {project.overviewHtml && (
           <section class="mt-12 lg:col-span-8">
-            <div class="rich-copy text-[14px] leading-[1.75] text-ink/82" set:html={project.overviewHtml} />
+            <div class="rich-copy body-copy-justify body-copy-project text-[14px] leading-[1.75] text-ink/82" set:html={project.overviewHtml} />
           </section>
         )}
 
@@ -65,9 +64,9 @@ const processGallery = project.processGallery.length ? project.processGallery : 
 
           <div class="work-process-copy">
             {project.processHtml ? (
-              <div class="rich-copy text-[14px] leading-[1.75] text-ink/82" set:html={project.processHtml} />
+              <div class="rich-copy body-copy-justify body-copy-project text-[14px] leading-[1.75] text-ink/82" set:html={project.processHtml} />
             ) : (
-              <p class="text-[14px] leading-[1.7] text-ink/72">Process documentation is being organized for this project.</p>
+              <p class="body-copy-justify body-copy-project text-[14px] leading-[1.7] text-ink/72">Process documentation is being organized for this project.</p>
             )}
           </div>
 

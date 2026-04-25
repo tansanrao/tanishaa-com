@@ -9,7 +9,6 @@ const work = defineCollection({
       title: z.string(),
       year: z.string(),
       medium: z.string().optional(),
-      publication: z.string().optional(),
       order: z.number(),
       indexSummary: z.string(),
       detailSummary: z.string(),

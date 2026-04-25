@@ -26,7 +26,6 @@ export interface WorkProject {
   order: number;
   year: string;
   medium?: string;
-  publication?: string;
   indexSummary: string;
   detailSummary: string;
   listingImage: WorkMedia;
@@ -139,7 +138,6 @@ const normalizeWorkEntry = async (entry: WorkEntry): Promise<WorkProject> => {
     order: entry.data.order,
     year: entry.data.year,
     medium: entry.data.medium,
-    publication: entry.data.publication,
     indexSummary: entry.data.indexSummary,
     detailSummary: entry.data.detailSummary,
     listingImage,
