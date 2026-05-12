@@ -98,12 +98,24 @@
     --body-copy-inline-size: clamp(18rem, 56vw, 43rem);
   }
 
+  .body-copy-work-detail {
+    --body-copy-inline-size: 100%;
+  }
+
+  .body-copy-process-detail {
+    --body-copy-inline-size: 100%;
+  }
+
   .body-copy-index {
     --body-copy-inline-size: clamp(12rem, 20vw, 21rem);
   }
 
   .body-copy-justify.rich-copy {
     max-inline-size: min(100%, var(--body-copy-inline-size, clamp(18rem, 58vw, 46rem)));
+  }
+
+  .body-copy-justify.rich-copy.body-copy-work-detail {
+    max-inline-size: 100%;
   }
 
   .body-copy-justify.rich-copy h2,
@@ -287,17 +299,27 @@
     -webkit-line-clamp: 2;
   }
 
+  .work-detail-content {
+    margin-inline: auto;
+    width: 100%;
+  }
+
   @media (min-width: 1024px) {
+    .work-detail-content {
+      max-width: 60rem;
+    }
+
     .project-gallery {
       align-items: stretch;
+      grid-template-columns: minmax(0, 1fr) clamp(9rem, 14vw, 12rem);
     }
 
     .project-gallery-stage {
-      height: clamp(20rem, 34vw, 31rem);
+      height: clamp(26rem, 50vw, 43rem);
     }
 
     .project-gallery-filmstrip {
-      height: clamp(20rem, 34vw, 31rem);
+      height: clamp(26rem, 50vw, 43rem);
       overflow-y: auto;
       overflow-x: hidden;
     }
@@ -315,39 +337,34 @@
     }
 
     .process-gallery {
-      width: 12rem;
+      grid-template-columns: repeat(3, clamp(9rem, 14vw, 12rem));
+      width: max-content;
+      max-width: 100%;
     }
 
     .work-process-section {
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: 2rem;
-      row-gap: 0.35rem;
+      row-gap: 1.15rem;
     }
 
     .work-process-heading-row {
-      grid-column: 9 / span 4;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 12rem;
-      align-items: end;
-      justify-content: end;
+      grid-column: 1 / -1;
+      display: block;
     }
 
     .work-process-heading {
-      grid-column: 1;
-      justify-self: end;
-      align-self: end;
-      margin-right: 0.15rem;
+      margin-right: 0;
     }
 
     .work-process-copy {
-      grid-column: 1 / span 8;
+      grid-column: 1 / -1;
       grid-row: 2;
     }
 
     .work-process-gallery-wrap {
-      grid-column: 9 / span 4;
-      grid-row: 2;
-      justify-self: end;
+      grid-column: 1 / -1;
+      grid-row: 3;
+      justify-self: start;
+      width: 100%;
     }
   }
 

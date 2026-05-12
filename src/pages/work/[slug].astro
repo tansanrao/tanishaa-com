@@ -32,16 +32,16 @@ const processGallery = project.processGallery.length ? project.processGallery : 
         </a>
       </div>
 
-      <div class="lg:grid lg:grid-cols-12 lg:gap-x-8 xl:gap-x-10">
+      <div class="work-detail-content lg:grid lg:grid-cols-12 lg:gap-x-8 xl:gap-x-10">
         <h1 class="text-[clamp(2.6rem,7vw,5.4rem)] font-semibold leading-[0.92] tracking-[-0.065em] lg:col-span-12">
           {project.title}
         </h1>
 
-        <div class="mt-9 lg:col-span-8">
+        <div class="mt-9 lg:col-span-12">
           <ProjectGallery gallery={project.mainGallery} title={project.title} />
         </div>
 
-        <div class="mt-7 lg:col-span-8">
+        <div class="mt-7 lg:col-span-12">
           <ProjectMeta
             title={project.title}
             year={project.year}
@@ -50,8 +50,8 @@ const processGallery = project.processGallery.length ? project.processGallery : 
         </div>
 
         {project.overviewHtml && (
-          <section class="mt-12 lg:col-span-8">
-            <div class="rich-copy body-copy-justify body-copy-project text-[14px] leading-[1.75] text-ink/82" set:html={project.overviewHtml} />
+          <section class="mt-12 lg:col-span-12">
+            <div class="rich-copy body-copy-justify body-copy-project body-copy-work-detail text-[14px] leading-[1.75] text-ink/82" set:html={project.overviewHtml} />
           </section>
         )}
 
@@ -64,9 +64,9 @@ const processGallery = project.processGallery.length ? project.processGallery : 
 
           <div class="work-process-copy">
             {project.processHtml ? (
-              <div class="rich-copy body-copy-justify body-copy-project text-[14px] leading-[1.75] text-ink/82" set:html={project.processHtml} />
+              <div class="rich-copy body-copy-justify body-copy-project body-copy-process-detail text-[14px] leading-[1.75] text-ink/82" set:html={project.processHtml} />
             ) : (
-              <p class="body-copy-justify body-copy-project text-[14px] leading-[1.7] text-ink/72">Process documentation is being organized for this project.</p>
+              <p class="body-copy-justify body-copy-project body-copy-process-detail text-[14px] leading-[1.7] text-ink/72">Process documentation is being organized for this project.</p>
             )}
           </div>
 
