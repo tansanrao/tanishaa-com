@@ -52,11 +52,11 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
 
   {isFilmstrip ? (
     <>
-      <div class="space-y-4">
-        <div class="project-gallery-stage relative overflow-hidden border border-ink/12 bg-[#0f0f10]">
+      <div class="min-w-0">
+        <div class="project-gallery-stage relative overflow-hidden">
           <button
             type="button"
-            class="project-gallery-inline-trigger absolute inset-0 z-0 flex h-full w-full cursor-zoom-in items-center justify-center p-5 text-left"
+            class="project-gallery-inline-trigger absolute inset-0 z-0 flex h-full w-full cursor-zoom-in items-center justify-center p-0 text-left"
             data-gallery-open
             aria-label={`Open ${title} gallery in fullscreen`}
           >
@@ -110,39 +110,38 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
           )}
 
           {showFullscreenButton && (
-            <div class="absolute bottom-4 right-4 z-10">
+            <div class="absolute bottom-3 right-3 z-10">
               <button
                 type="button"
-                class="viewer-icon-button h-11 min-w-11 px-4 text-[11px] uppercase tracking-[0.14em]"
+                class="viewer-icon-button viewer-icon-button-compact"
                 data-gallery-open
                 aria-label={`Open ${title} gallery in fullscreen`}
               >
-                Fullscreen
+                <svg aria-hidden="true" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8 3H3v5" />
+                  <path d="M16 3h5v5" />
+                  <path d="M21 16v5h-5" />
+                  <path d="M8 21H3v-5" />
+                </svg>
               </button>
             </div>
           )}
         </div>
-
-        {showInlineCaption && (
-          <div class="min-h-[20px] text-[12px] uppercase tracking-[0.12em] text-ink/60" data-gallery-caption>
-            {gallery[0]?.caption ?? gallery[0]?.alt}
-          </div>
-        )}
       </div>
 
       {hasMultipleImages && (
         <div
-          class="project-gallery-filmstrip border border-ink/10 bg-paper/55"
+          class="project-gallery-filmstrip order-3 border border-ink/12 bg-paper/55 lg:order-none"
           data-gallery-filmstrip
           aria-label={`${title} image thumbnails`}
         >
-          <div class="project-gallery-filmstrip-inner flex gap-3 p-3 lg:flex-col">
+          <div class="project-gallery-filmstrip-inner flex gap-3 p-3 lg:flex-col" data-gallery-filmstrip-scroll>
             {gallery.map((item, index) => (
               <button
                 type="button"
                 class:list={[
-                  'project-gallery-thumb focus-visible-outline overflow-hidden border bg-[#d9d9d9] transition',
-                  index === 0 ? 'is-active border-accent' : 'border-ink/12 hover:border-ink/30',
+                  'project-gallery-thumb focus-visible-outline overflow-hidden transition',
+                  index === 0 ? 'is-active' : '',
                 ]}
                 data-gallery-thumb
                 data-index={index}
@@ -165,13 +164,19 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
           </div>
         </div>
       )}
+
+      {showInlineCaption && (
+        <div class="project-gallery-caption order-2 min-h-[20px] text-[12px] uppercase tracking-[0.12em] text-ink/60 lg:order-none" data-gallery-caption>
+          {gallery[0]?.caption ?? gallery[0]?.alt}
+        </div>
+      )}
     </>
   ) : (
     <>
       {gallery.map((item, index) => (
         <button
           type="button"
-          class="process-gallery-card focus-visible-outline overflow-hidden border border-ink/10 bg-[#ddd6c8] transition hover:border-ink/24"
+          class="process-gallery-card focus-visible-outline overflow-hidden transition"
           data-gallery-item-button
           data-index={index}
           aria-label={`Open ${title} image ${index + 1} in fullscreen`}
@@ -277,6 +282,7 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
       const nextButton = galleryRoot.querySelector('[data-gallery-next]');
       const caption = galleryRoot.querySelector('[data-gallery-caption]');
       const filmstrip = galleryRoot.querySelector('[data-gallery-filmstrip]');
+      const filmstripScroll = galleryRoot.querySelector('[data-gallery-filmstrip-scroll]');
       const overlay = galleryRoot.querySelector('[data-viewer-overlay]');
       const viewerImage = galleryRoot.querySelector('[data-viewer-image]');
       const viewerCaption = galleryRoot.querySelector('[data-viewer-caption]');
@@ -417,9 +423,9 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
 
       if (filmstrip instanceof HTMLElement) {
         filmstrip.addEventListener('wheel', (event) => {
-          if (window.innerWidth >= 1024) {
+          if (window.innerWidth >= 1024 && filmstripScroll instanceof HTMLElement) {
             event.preventDefault();
-            filmstrip.scrollTop += event.deltaY;
+            filmstripScroll.scrollTop += event.deltaY;
           }
         });
       }

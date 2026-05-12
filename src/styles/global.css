@@ -82,7 +82,7 @@
     text-align: justify;
     text-align-last: justify;
     text-justify: inter-word;
-    hyphens: auto;
+    hyphens: none;
     overflow-wrap: break-word;
   }
 
@@ -157,10 +157,8 @@
   }
 
   .project-gallery-stage {
-    height: clamp(22rem, 48vw, 38rem);
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)),
-      #0b0b0c;
+    aspect-ratio: var(--gallery-stage-aspect);
+    background: transparent;
   }
 
   .project-gallery-inline-trigger {
@@ -184,7 +182,7 @@
   }
 
   .project-gallery-thumb.is-active {
-    box-shadow: 0 0 0 1px rgba(218, 56, 50, 0.18);
+    opacity: 0.72;
   }
 
   .process-gallery {
@@ -214,6 +212,12 @@
 
   .process-gallery-card:hover {
     transform: translateY(-1px);
+  }
+
+  .viewer-icon-button-compact {
+    min-height: 2.25rem;
+    min-width: 2.25rem;
+    padding: 0;
   }
 
   .viewer-stage-fullscreen {
@@ -314,21 +318,32 @@
       grid-template-columns: minmax(0, 1fr) clamp(9rem, 14vw, 12rem);
     }
 
-    .project-gallery-stage {
-      height: clamp(26rem, 50vw, 43rem);
+    .project-gallery-filmstrip {
+      grid-column: 2;
+      grid-row: 1;
+      position: relative;
+      min-height: 0;
+      overflow: hidden;
     }
 
-    .project-gallery-filmstrip {
-      height: clamp(26rem, 50vw, 43rem);
+    .project-gallery-filmstrip-inner {
+      position: absolute;
+      inset: 0;
+      min-height: 0;
       overflow-y: auto;
       overflow-x: hidden;
     }
 
-    .project-gallery-filmstrip::-webkit-scrollbar {
+    .project-gallery-caption {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .project-gallery-filmstrip-inner::-webkit-scrollbar {
       width: 0.45rem;
     }
 
-    .project-gallery-filmstrip::-webkit-scrollbar-thumb {
+    .project-gallery-filmstrip-inner::-webkit-scrollbar-thumb {
       background: rgba(27, 26, 28, 0.18);
     }
 
@@ -369,10 +384,6 @@
   }
 
   @media (max-width: 1023px) {
-    .project-gallery-stage {
-      height: clamp(18rem, 72vw, 29rem);
-    }
-
     .project-gallery-filmstrip {
       overflow-x: auto;
       overflow-y: hidden;
