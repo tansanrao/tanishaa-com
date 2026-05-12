@@ -1,10 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+@theme {
+  --color-paper: #F1EFEC;
+  --color-ink: #1B1A1C;
+  --color-accent: #DA3832;
+  --color-nav-active: #002eff;
+  --font-sans: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-accent: "Almarai", sans-serif;
+  --font-editorial: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 @layer base {
   :root {
     color: #1B1A1C;
-    background-color: #F6F2E7;
+    background-color: #F1EFEC;
     font-family: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
   }
 
@@ -16,7 +26,7 @@
     margin: 0;
     min-height: 100vh;
     font-family: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
-    background-color: #F6F2E7;
+    background-color: #F1EFEC;
     color: #1B1A1C;
   }
 
@@ -36,7 +46,7 @@
 
   ::selection {
     background-color: #DA3832;
-    color: #F6F2E7;
+    color: #F1EFEC;
   }
 }
 

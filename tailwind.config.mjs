@@ -4,9 +4,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        paper: '#F6F2E7',
+        paper: '#F1EFEC',
         ink: '#1B1A1C',
         accent: '#DA3832',
+        'nav-active': '#002eff',
       },
       fontFamily: {
         sans: ['"Schibsted Grotesk"', 'ui-sans-serif', 'system-ui', 'sans-serif'],

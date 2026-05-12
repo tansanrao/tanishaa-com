@@ -67,19 +67,7 @@ projects.forEach((project, index) => {
 const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.length) }, (_, index) => index);
 ---
 
-<main class="min-h-screen bg-paper font-editorial text-ink">
-  <header class="sticky top-0 z-20 bg-paper">
-    <div class="mx-auto flex h-14 w-full max-w-[1360px] items-center justify-between px-6 lg:px-10">
-      <a href="/" class="text-[18px] leading-none no-underline">TANISHAA RAO</a>
-
-      <nav class="flex items-center gap-12" aria-label="Primary">
-        <a href="/work" class="text-[18px] leading-none text-accent no-underline" aria-current="page">WORK</a>
-        <a href="/contact" class="text-[18px] leading-none no-underline">CONTACT</a>
-      </nav>
-    </div>
-  </header>
-
-  <section class="mx-auto w-full max-w-[1360px] px-6 pb-24 pt-12 lg:px-10">
+<section class="mx-auto w-full max-w-[1360px] px-6 pb-24 pt-12 font-editorial text-ink lg:px-10">
     <div class="grid grid-cols-1 items-start justify-center gap-y-8 lg:gap-x-10 lg:gap-y-0 lg:[grid-template-columns:minmax(24rem,31rem)_5.75rem_minmax(24rem,31rem)]">
       <div class="flex w-full flex-col gap-y-0 justify-self-end">
         {rowIndexes.map((rowIndex) => {
@@ -204,8 +192,7 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
         })}
       </div>
     </div>
-  </section>
-</main>
+</section>
 
 <script>
   const initDenseWorkIndex = () => {

@@ -1,11 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import WorkDenseIndex from '../components/work/WorkDenseIndex.astro';
+import WorkIndex from '../components/work/WorkIndex.astro';
 import { getWorkProjects } from '../lib/work';
 
 const projects = await getWorkProjects();
 ---
 
-<Layout pageTitle="Tanishaa Rao — Work">
-  <WorkDenseIndex projects={projects} />
+<Layout pageTitle="Tanishaa Rao — Work" activeNav="work">
+  <WorkIndex projects={projects} />
 </Layout>

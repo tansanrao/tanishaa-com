@@ -1,22 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import NavBar from '../components/NavBar.astro';
-import HeroMediaPlaceholder from '../components/HeroMediaPlaceholder.astro';
-import BioBlock from '../components/BioBlock.astro';
-import FooterBand from '../components/FooterBand.astro';
+import HomeHero from '../components/home/HomeHero.astro';
+import HomeBio from '../components/home/HomeBio.astro';
 ---
 
 <Layout pageTitle="Tanishaa Rao — Home">
-  <main class="min-h-screen flex flex-col bg-paper text-ink">
-    <NavBar />
-    <div class="flex-1 w-full flex flex-col">
-      <div class="flex-[2] flex items-center justify-center">
-        <HeroMediaPlaceholder />
-      </div>
-      <div class="flex-[1] flex items-center justify-center pb-8">
-        <BioBlock />
-      </div>
+  <div class="flex min-h-[calc(100vh-8rem)] w-full flex-col">
+    <div class="flex-[2] flex items-center justify-center">
+      <HomeHero />
     </div>
-    <FooterBand />
-  </main>
+    <div class="flex-[1] flex items-center justify-center pb-8">
+      <HomeBio />
+    </div>
+  </div>
 </Layout>
