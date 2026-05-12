@@ -1,6 +1,14 @@
 ---
 import { Image } from 'astro:assets';
 import type { WorkProject } from '../../lib/work';
+import scan1 from '../../assets/work-spine/Scan1.jpg';
+import scan2 from '../../assets/work-spine/Scan2.jpg';
+import scan3 from '../../assets/work-spine/Scan3.jpg';
+import scan4 from '../../assets/work-spine/Scan4.jpg';
+import scan5 from '../../assets/work-spine/Scan5.jpg';
+import scan6 from '../../assets/work-spine/Scan6.jpg';
+import scan7 from '../../assets/work-spine/Scan7.jpg';
+import scan8 from '../../assets/work-spine/Scan8.jpg';
 
 interface Props {
   projects: WorkProject[];
@@ -18,7 +26,6 @@ interface DenseRibItem {
 
 const { projects } = Astro.props as Props;
 
-const STERNUM_FRAME_COUNT = 6;
 const UNTITLED_PROJECT = 'Untitled Project';
 const MEDIUM_PLACEHOLDER = 'Medium TBD';
 const SUMMARY_PLACEHOLDER = 'Summary coming soon.';
@@ -43,7 +50,7 @@ const toRibItem = (project: WorkProject): DenseRibItem => {
   };
 };
 
-const sternumFrames = Array.from({ length: STERNUM_FRAME_COUNT }, (_, index) => index);
+const sternumFrames = [scan1, scan2, scan3, scan4, scan5, scan6, scan7, scan8];
 
 const leftRibs: DenseRibItem[] = [];
 const rightRibs: DenseRibItem[] = [];
@@ -128,13 +135,19 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
       </div>
 
       <div class="pointer-events-none hidden w-[5.75rem] flex-col gap-y-3 lg:flex" aria-hidden="true">
-        {sternumFrames.map((frame) => (
-          <div
-            class="flex h-[3.75rem] items-center justify-center border border-dashed border-black/25 bg-black/10 text-[9px] uppercase tracking-[0.18em] text-black/55"
-            data-sternum-frame={frame}
-          >
-            ILLUSTRATION
-          </div>
+        {sternumFrames.map((frame, index) => (
+          <Image
+            class="block h-[3.75rem] w-full object-cover"
+            src={frame}
+            alt=""
+            width="92"
+            height="60"
+            densities={[1, 2]}
+            fit="cover"
+            position="center"
+            loading="lazy"
+            data-sternum-frame={index}
+          />
         ))}
       </div>
 
