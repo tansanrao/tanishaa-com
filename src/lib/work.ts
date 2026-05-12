@@ -9,9 +9,11 @@ import remarkRehype from 'remark-rehype';
 type WorkEntry = CollectionEntry<'work'>;
 type WorkImage = WorkEntry['data']['listingImage']['src'];
 type WorkMediaEntry = WorkEntry['data']['mainGallery'][number];
+type WorkImageMediaEntry = WorkEntry['data']['processGallery'][number];
 type ViewerTransform = Awaited<ReturnType<typeof getImage>>;
 
-export interface WorkMedia {
+export interface WorkImageMedia {
+  type: 'image';
   image: WorkImage;
   alt: string;
   caption?: string;
@@ -19,6 +21,19 @@ export interface WorkMedia {
   viewerWidth: number;
   viewerHeight: number;
 }
+
+export interface WorkVideoMedia {
+  type: 'video';
+  src: string;
+  poster?: WorkImage;
+  alt: string;
+  caption?: string;
+  viewerSrc: string;
+  viewerWidth: number;
+  viewerHeight: number;
+}
+
+export type WorkMedia = WorkImageMedia | WorkVideoMedia;
 
 export interface WorkProject {
   id: string;
@@ -28,9 +43,9 @@ export interface WorkProject {
   medium?: string;
   indexSummary: string;
   detailSummary: string;
-  listingImage: WorkMedia;
+  listingImage: WorkImageMedia;
   mainGallery: WorkMedia[];
-  processGallery: WorkMedia[];
+  processGallery: WorkImageMedia[];
   overviewHtml: string;
   processHtml: string;
 }
@@ -42,7 +57,7 @@ const toViewerDimensions = (viewer: ViewerTransform) => ({
   viewerHeight: Number(viewer.attributes.height ?? 0),
 });
 
-const toMedia = async (item: WorkMediaEntry): Promise<WorkMedia> => {
+const toImageMedia = async (item: WorkImageMediaEntry): Promise<WorkImageMedia> => {
   const viewer = await getImage({
     src: item.src,
     format: 'webp',
@@ -51,6 +66,7 @@ const toMedia = async (item: WorkMediaEntry): Promise<WorkMedia> => {
   });
 
   return {
+    type: 'image',
     image: item.src,
     alt: item.alt,
     caption: item.caption,
@@ -59,7 +75,24 @@ const toMedia = async (item: WorkMediaEntry): Promise<WorkMedia> => {
   };
 };
 
-const toListingMedia = async (item: WorkEntry['data']['listingImage']): Promise<WorkMedia> => {
+const toMedia = async (item: WorkMediaEntry): Promise<WorkMedia> => {
+  if (item.type === 'video') {
+    return {
+      type: 'video',
+      src: item.src,
+      poster: item.poster,
+      alt: item.alt,
+      caption: item.caption,
+      viewerSrc: item.src,
+      viewerWidth: item.poster?.width ?? 0,
+      viewerHeight: item.poster?.height ?? 0,
+    };
+  }
+
+  return toImageMedia(item);
+};
+
+const toListingMedia = async (item: WorkEntry['data']['listingImage']): Promise<WorkImageMedia> => {
   const viewer = await getImage({
     src: item.src,
     format: 'webp',
@@ -68,8 +101,9 @@ const toListingMedia = async (item: WorkEntry['data']['listingImage']): Promise<
   });
 
   return {
+    type: 'image',
     image: item.src,
-  alt: item.alt,
+    alt: item.alt,
     viewerSrc: viewer.src,
     ...toViewerDimensions(viewer),
   };
@@ -129,7 +163,7 @@ const normalizeWorkEntry = async (entry: WorkEntry): Promise<WorkProject> => {
     renderMarkdown(sections.process),
     toListingMedia(entry.data.listingImage),
     Promise.all(entry.data.mainGallery.map(toMedia)),
-    Promise.all(entry.data.processGallery.map(toMedia)),
+    Promise.all(entry.data.processGallery.map(toImageMedia)),
   ]);
 
   return {

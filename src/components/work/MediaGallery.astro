@@ -26,10 +26,12 @@ const {
   showFullscreenButton = layout === 'filmstrip',
 } = Astro.props as Props;
 
-const hasMultipleImages = gallery.length > 1;
+const hasMultipleItems = gallery.length > 1;
 const isFilmstrip = layout === 'filmstrip';
 const viewerItems = gallery.map((item) => ({
+  type: item.type,
   src: item.viewerSrc,
+  posterSrc: item.type === 'video' ? item.poster?.src : undefined,
   alt: item.alt,
   caption: item.caption,
   width: item.viewerWidth,
@@ -54,47 +56,60 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
     <>
       <div class="min-w-0">
         <div class="project-gallery-stage relative overflow-hidden">
-          <button
-            type="button"
-            class="project-gallery-inline-trigger absolute inset-0 z-0 flex h-full w-full cursor-zoom-in items-center justify-center p-0 text-left"
-            data-gallery-open
-            aria-label={`Open ${title} gallery in fullscreen`}
-          >
-            {gallery.map((item, index) => (
-              <div
-                class:list={[
-                  'project-gallery-slide h-full w-full',
-                  index === 0 ? 'block' : 'hidden',
-                ]}
-                data-gallery-slide
-                data-index={index}
-              >
-                <Picture
-                  src={item.image}
-                  alt={item.alt}
-                  formats={['avif', 'webp']}
-                  width={Math.min(item.image.width, 1400)}
-                  widths={getResponsiveWidths(Math.min(item.image.width, 1400), [480, 960])}
-                  sizes="(min-width: 1024px) 900px, 100vw"
-                  layout="constrained"
-                  quality="high"
-                  fit="contain"
-                  position="center"
-                  priority={index === 0}
-                  class="h-full w-full object-contain"
-                  pictureAttributes={{ class: 'h-full w-full' }}
+          {gallery.map((item, index) => (
+            <div
+              class:list={[
+                'project-gallery-slide h-full w-full',
+                index === 0 ? 'block' : 'hidden',
+              ]}
+              data-gallery-slide
+              data-index={index}
+            >
+              {item.type === 'image' ? (
+                <button
+                  type="button"
+                  class="project-gallery-inline-trigger flex h-full w-full cursor-zoom-in items-center justify-center p-0 text-left"
+                  data-gallery-open
+                  aria-label={`Open ${title} image ${index + 1} in fullscreen`}
+                >
+                  <Picture
+                    src={item.image}
+                    alt={item.alt}
+                    formats={['avif', 'webp']}
+                    width={Math.min(item.image.width, 1400)}
+                    widths={getResponsiveWidths(Math.min(item.image.width, 1400), [480, 960])}
+                    sizes="(min-width: 1024px) 900px, 100vw"
+                    layout="constrained"
+                    quality="high"
+                    fit="contain"
+                    position="center"
+                    priority={index === 0}
+                    class="h-full w-full object-contain"
+                    pictureAttributes={{ class: 'h-full w-full' }}
+                  />
+                </button>
+              ) : (
+                <video
+                  class="h-full w-full bg-black object-contain"
+                  src={item.src}
+                  poster={item.poster?.src}
+                  controls
+                  preload="metadata"
+                  playsinline
+                  data-gallery-video
+                  aria-label={item.alt}
                 />
-              </div>
-            ))}
-          </button>
+              )}
+            </div>
+          ))}
 
-          {hasMultipleImages && showInlineControls && (
+          {hasMultipleItems && showInlineControls && (
             <div class="pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4 sm:px-5">
               <button
                 type="button"
                 class="viewer-icon-button pointer-events-auto"
                 data-gallery-prev
-                aria-label="Previous image"
+                aria-label="Previous media item"
               >
                 <span aria-hidden="true" class="text-2xl leading-none">‹</span>
               </button>
@@ -102,7 +117,7 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
                 type="button"
                 class="viewer-icon-button pointer-events-auto"
                 data-gallery-next
-                aria-label="Next image"
+                aria-label="Next media item"
               >
                 <span aria-hidden="true" class="text-2xl leading-none">›</span>
               </button>
@@ -129,36 +144,57 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
         </div>
       </div>
 
-      {hasMultipleImages && (
+      {hasMultipleItems && (
         <div
           class="project-gallery-filmstrip order-3 border border-ink/12 bg-paper/55 lg:order-none"
           data-gallery-filmstrip
-          aria-label={`${title} image thumbnails`}
+          aria-label={`${title} media thumbnails`}
         >
           <div class="project-gallery-filmstrip-inner flex gap-3 p-3 lg:flex-col" data-gallery-filmstrip-scroll>
             {gallery.map((item, index) => (
               <button
                 type="button"
                 class:list={[
-                  'project-gallery-thumb focus-visible-outline overflow-hidden transition',
+                  'project-gallery-thumb focus-visible-outline relative overflow-hidden transition',
                   index === 0 ? 'is-active' : '',
                 ]}
                 data-gallery-thumb
                 data-index={index}
-                aria-label={`View image ${index + 1} for ${title}`}
+                aria-label={`View media item ${index + 1} for ${title}`}
                 aria-pressed={index === 0 ? 'true' : 'false'}
               >
-                <Image
-                  class="h-full w-full object-cover object-center"
-                  src={item.image}
-                  alt=""
-                  width={192}
-                  height={128}
-                  quality="mid"
-                  fit="cover"
-                  position="center"
-                  loading="lazy"
-                />
+                {item.type === 'image' ? (
+                  <Image
+                    class="h-full w-full object-cover object-center"
+                    src={item.image}
+                    alt=""
+                    width={192}
+                    height={128}
+                    quality="mid"
+                    fit="cover"
+                    position="center"
+                    loading="lazy"
+                  />
+                ) : item.poster ? (
+                  <>
+                    <Image
+                      class="h-full w-full object-cover object-center"
+                      src={item.poster}
+                      alt=""
+                      width={192}
+                      height={128}
+                      quality="mid"
+                      fit="cover"
+                      position="center"
+                      loading="lazy"
+                    />
+                    <span class="media-thumb-play" aria-hidden="true">▶</span>
+                  </>
+                ) : (
+                  <span class="flex h-full w-full items-center justify-center bg-black text-paper">
+                    <span class="media-thumb-play media-thumb-play-static" aria-hidden="true">▶</span>
+                  </span>
+                )}
               </button>
             ))}
           </div>
@@ -174,29 +210,31 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
   ) : (
     <>
       {gallery.map((item, index) => (
-        <button
-          type="button"
-          class="process-gallery-card focus-visible-outline overflow-hidden transition"
-          data-gallery-item-button
-          data-index={index}
-          aria-label={`Open ${title} image ${index + 1} in fullscreen`}
-        >
-          <Picture
-            src={item.image}
-            alt={item.alt}
-            formats={['avif', 'webp']}
-            width={Math.min(item.image.width, 640)}
-            widths={getResponsiveWidths(Math.min(item.image.width, 640), [320])}
-            sizes="(min-width: 1024px) 100vw, (min-width: 640px) 33vw, 50vw"
-            layout="constrained"
-            quality="high"
-            fit="cover"
-            position="center"
-            class="h-full w-full object-cover object-center"
-            pictureAttributes={{ class: 'h-full w-full' }}
-            loading="lazy"
-          />
-        </button>
+        item.type === 'image' && (
+          <button
+            type="button"
+            class="process-gallery-card focus-visible-outline overflow-hidden transition"
+            data-gallery-item-button
+            data-index={index}
+            aria-label={`Open ${title} image ${index + 1} in fullscreen`}
+          >
+            <Picture
+              src={item.image}
+              alt={item.alt}
+              formats={['avif', 'webp']}
+              width={Math.min(item.image.width, 640)}
+              widths={getResponsiveWidths(Math.min(item.image.width, 640), [320])}
+              sizes="(min-width: 1024px) 100vw, (min-width: 640px) 33vw, 50vw"
+              layout="constrained"
+              quality="high"
+              fit="cover"
+              position="center"
+              class="h-full w-full object-cover object-center"
+              pictureAttributes={{ class: 'h-full w-full' }}
+              loading="lazy"
+            />
+          </button>
+        )
       ))}
     </>
   )}
@@ -213,12 +251,12 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
       </div>
 
       <div class="relative flex w-full max-w-[1400px] items-center justify-center">
-        {hasMultipleImages && (
+        {hasMultipleItems && (
           <button
             type="button"
             class="viewer-icon-button absolute left-2 top-1/2 z-10 -translate-y-1/2 sm:left-6"
             data-viewer-prev
-            aria-label="Previous fullscreen image"
+            aria-label="Previous fullscreen media item"
           >
             <span aria-hidden="true" class="text-2xl leading-none">‹</span>
           </button>
@@ -226,14 +264,15 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
 
         <div class="viewer-stage viewer-stage-fullscreen">
           <img class="h-full w-full object-contain" data-viewer-image src="" alt="" />
+          <video class="hidden h-full w-full object-contain" data-viewer-video controls preload="metadata" playsinline aria-label=""></video>
         </div>
 
-        {hasMultipleImages && (
+        {hasMultipleItems && (
           <button
             type="button"
             class="viewer-icon-button absolute right-2 top-1/2 z-10 -translate-y-1/2 sm:right-6"
             data-viewer-next
-            aria-label="Next fullscreen image"
+            aria-label="Next fullscreen media item"
           >
             <span aria-hidden="true" class="text-2xl leading-none">›</span>
           </button>
@@ -247,7 +286,15 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
 
 <script>
   const initMediaGalleries = () => {
-    type ViewerItem = { src: string; alt: string; caption?: string; width?: number; height?: number };
+    type ViewerItem = {
+      type: 'image' | 'video';
+      src: string;
+      posterSrc?: string;
+      alt: string;
+      caption?: string;
+      width?: number;
+      height?: number;
+    };
 
     const galleries = document.querySelectorAll('[data-media-gallery]');
 
@@ -269,6 +316,7 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
             (item): item is ViewerItem =>
               typeof item === 'object' &&
               item !== null &&
+              (item.type === 'image' || item.type === 'video') &&
               typeof item.src === 'string' &&
               typeof item.alt === 'string'
           )
@@ -285,6 +333,7 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
       const filmstripScroll = galleryRoot.querySelector('[data-gallery-filmstrip-scroll]');
       const overlay = galleryRoot.querySelector('[data-viewer-overlay]');
       const viewerImage = galleryRoot.querySelector('[data-viewer-image]');
+      const viewerVideo = galleryRoot.querySelector('[data-viewer-video]');
       const viewerCaption = galleryRoot.querySelector('[data-viewer-caption]');
       const viewerCounter = galleryRoot.querySelector('[data-viewer-counter]');
       const viewerPrev = galleryRoot.querySelector('[data-viewer-prev]');
@@ -296,6 +345,24 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
       const wrapIndex = (index: number) => {
         const length = items.length;
         return length ? (index + length) % length : 0;
+      };
+
+      const pauseVideo = (video: HTMLVideoElement) => {
+        video.pause();
+      };
+
+      const pauseInactiveVideos = () => {
+        slides.forEach((slide, index) => {
+          if (index === activeIndex) {
+            return;
+          }
+
+          slide.querySelectorAll('video').forEach((video) => {
+            if (video instanceof HTMLVideoElement) {
+              pauseVideo(video);
+            }
+          });
+        });
       };
 
       const syncThumbState = () => {
@@ -322,6 +389,8 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
           slide.classList.toggle('block', index === activeIndex);
         });
 
+        pauseInactiveVideos();
+
         const current = items[activeIndex];
         if (caption instanceof HTMLElement && current) {
           caption.textContent = current.caption ?? current.alt ?? '';
@@ -332,19 +401,33 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
 
       const syncViewerState = () => {
         const current = items[activeIndex];
-        if (!current || !(viewerImage instanceof HTMLImageElement)) {
+        if (!current || !(viewerImage instanceof HTMLImageElement) || !(viewerVideo instanceof HTMLVideoElement)) {
           return;
         }
 
-        viewerImage.src = current.src;
-        viewerImage.alt = current.alt ?? '';
+        pauseVideo(viewerVideo);
 
-        if (typeof current.width === 'number' && current.width > 0) {
-          viewerImage.width = current.width;
-        }
+        if (current.type === 'video') {
+          viewerImage.classList.add('hidden');
+          viewerVideo.classList.remove('hidden');
+          viewerVideo.src = current.src;
+          viewerVideo.poster = current.posterSrc ?? '';
+          viewerVideo.setAttribute('aria-label', current.alt ?? '');
+        } else {
+          viewerVideo.classList.add('hidden');
+          viewerVideo.removeAttribute('src');
+          viewerVideo.load();
+          viewerImage.classList.remove('hidden');
+          viewerImage.src = current.src;
+          viewerImage.alt = current.alt ?? '';
 
-        if (typeof current.height === 'number' && current.height > 0) {
-          viewerImage.height = current.height;
+          if (typeof current.width === 'number' && current.width > 0) {
+            viewerImage.width = current.width;
+          }
+
+          if (typeof current.height === 'number' && current.height > 0) {
+            viewerImage.height = current.height;
+          }
         }
 
         if (viewerCaption instanceof HTMLElement) {
@@ -384,6 +467,10 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
       const closeViewer = () => {
         if (!(overlay instanceof HTMLElement)) {
           return;
+        }
+
+        if (viewerVideo instanceof HTMLVideoElement) {
+          pauseVideo(viewerVideo);
         }
 
         overlay.classList.add('hidden');

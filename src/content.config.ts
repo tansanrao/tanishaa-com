@@ -4,7 +4,23 @@ import { z } from 'astro/zod';
 
 const work = defineCollection({
   loader: glob({ pattern: '**/index.md', base: './src/content/work' }),
-  schema: ({ image }) =>
+  schema: ({ image }) => {
+    const imageMedia = z.object({
+      type: z.literal('image').default('image'),
+      src: image(),
+      alt: z.string(),
+      caption: z.string().optional(),
+    });
+
+    const videoMedia = z.object({
+      type: z.literal('video'),
+      src: z.string(),
+      poster: image().optional(),
+      alt: z.string(),
+      caption: z.string().optional(),
+    });
+
+    return (
     z.object({
       title: z.string(),
       year: z.string(),
@@ -18,23 +34,17 @@ const work = defineCollection({
       }),
       mainGallery: z
         .array(
-          z.object({
-            src: image(),
-            alt: z.string(),
-            caption: z.string().optional(),
-          })
+          z.union([imageMedia, videoMedia])
         )
         .min(1),
       processGallery: z
         .array(
-          z.object({
-            src: image(),
-            alt: z.string(),
-            caption: z.string().optional(),
-          })
+          imageMedia
         )
         .default([]),
-    }),
+    })
+    );
+  },
 });
 
 export const collections = { work };

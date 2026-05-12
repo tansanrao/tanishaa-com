@@ -50,6 +50,7 @@ const toRibItem = (project: WorkProject): DenseRibItem => {
   };
 };
 
+const orderedRibs = projects.map(toRibItem);
 const sternumFrames = [scan1, scan2, scan3, scan4, scan5, scan6, scan7, scan8];
 
 const leftRibs: DenseRibItem[] = [];
@@ -68,7 +69,47 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
 ---
 
 <section class="mx-auto w-full max-w-[1360px] px-6 pb-24 pt-12 font-editorial text-ink lg:px-10">
-    <div class="grid grid-cols-1 items-start justify-center gap-y-8 lg:gap-x-10 lg:gap-y-0 lg:[grid-template-columns:minmax(24rem,31rem)_5.75rem_minmax(24rem,31rem)]">
+    <div class="flex flex-col gap-8 lg:hidden">
+      {orderedRibs.map((rib) => (
+        <a
+          href={rib.href}
+          class="grid w-full grid-cols-[7.5rem_minmax(0,1fr)] items-start gap-x-5 text-ink no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-accent focus-visible:outline-offset-2"
+          aria-label={rib.accessibleLabel}
+        >
+          <span class="block aspect-[122/73] w-full overflow-hidden" aria-hidden="true">
+            {rib.image ? (
+              <Image
+                class="h-full w-full object-cover"
+                src={rib.image.image}
+                alt=""
+                width="136"
+                height="81"
+                densities={[1, 2]}
+                fit="cover"
+                position="center"
+                loading="lazy"
+              />
+            ) : (
+              <span class="flex h-full w-full items-center justify-center border border-dashed border-black/25 bg-black/10 text-[9px] uppercase tracking-[0.18em] text-black/55">
+                {COVER_PLACEHOLDER}
+              </span>
+            )}
+          </span>
+
+          <span class="flex min-w-0 flex-col">
+            <span class="text-[12px] uppercase tracking-[0.14em] text-ink/58">
+              {rib.mediumText}
+            </span>
+            <span class="mt-1 text-[18px] font-medium leading-[1.08]">
+              {rib.title}
+            </span>
+            <span class="body-copy-justify body-copy-index mt-2 w-full text-[13px] text-ink/90">{rib.summary}</span>
+          </span>
+        </a>
+      ))}
+    </div>
+
+    <div class="hidden grid-cols-1 items-start justify-center gap-y-8 lg:grid lg:gap-x-10 lg:gap-y-0 lg:[grid-template-columns:minmax(24rem,31rem)_5.75rem_minmax(24rem,31rem)]">
       <div class="flex w-full flex-col gap-y-0 justify-self-end">
         {rowIndexes.map((rowIndex) => {
           const rib = leftRibs[rowIndex];

@@ -195,6 +195,29 @@
     opacity: 0.72;
   }
 
+  .media-thumb-play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: inline-flex;
+    height: 2.25rem;
+    width: 2.25rem;
+    transform: translate(-50%, -50%);
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: rgba(12, 12, 13, 0.74);
+    color: #f6f2e7;
+    font-size: 0.72rem;
+    line-height: 1;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
+  }
+
+  .media-thumb-play-static {
+    position: static;
+    transform: none;
+  }
+
   .process-gallery {
     width: 100%;
   }
