@@ -11,32 +11,23 @@ listingImage:
 mainGallery:
   - src: "./main/posters.jpg"
     alt: "Ensemble Arts poster series."
-    caption: "Poster series"
   - src: "./main/bus-shelter-1.jpg"
     alt: "Ensemble Arts bus shelter mockup one."
-    caption: "Bus shelter mockup 1"
   - src: "./main/bus-shelter-2.jpg"
     alt: "Ensemble Arts bus shelter mockup two."
-    caption: "Bus shelter mockup 2"
   - src: "./main/mailer-1.jpg"
     alt: "Ensemble Arts mailer layout one."
-    caption: "Mailer layout 1"
   - src: "./main/mailer-2.jpg"
     alt: "Ensemble Arts mailer layout two."
-    caption: "Mailer layout 2"
 processGallery:
   - src: "./process/process-01.jpg"
     alt: "Ensemble Arts typographic collage process image one."
-    caption: "Analog collage study"
   - src: "./process/process-02.jpg"
     alt: "Ensemble Arts typographic process image two."
-    caption: "Process study 2"
   - src: "./process/process-03.jpg"
     alt: "Ensemble Arts typographic process image three."
-    caption: "Process study 3"
   - src: "./process/process-04.jpg"
     alt: "Ensemble Arts typographic process image four."
-    caption: "Process study 4"
 ---
 
 ## Overview

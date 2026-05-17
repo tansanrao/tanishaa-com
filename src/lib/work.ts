@@ -16,7 +16,6 @@ export interface WorkImageMedia {
   type: 'image';
   image: WorkImage;
   alt: string;
-  caption?: string;
   viewerSrc: string;
   viewerWidth: number;
   viewerHeight: number;
@@ -27,7 +26,6 @@ export interface WorkVideoMedia {
   src: string;
   poster?: WorkImage;
   alt: string;
-  caption?: string;
   viewerSrc: string;
   viewerWidth: number;
   viewerHeight: number;
@@ -69,7 +67,6 @@ const toImageMedia = async (item: WorkImageMediaEntry): Promise<WorkImageMedia> 
     type: 'image',
     image: item.src,
     alt: item.alt,
-    caption: item.caption,
     viewerSrc: viewer.src,
     ...toViewerDimensions(viewer),
   };
@@ -82,7 +79,6 @@ const toMedia = async (item: WorkMediaEntry): Promise<WorkMedia> => {
       src: item.src,
       poster: item.poster,
       alt: item.alt,
-      caption: item.caption,
       viewerSrc: item.src,
       viewerWidth: item.poster?.width ?? 0,
       viewerHeight: item.poster?.height ?? 0,

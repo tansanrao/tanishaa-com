@@ -9,7 +9,6 @@ const work = defineCollection({
       type: z.literal('image').default('image'),
       src: image(),
       alt: z.string(),
-      caption: z.string().optional(),
     });
 
     const videoMedia = z.object({
@@ -17,7 +16,6 @@ const work = defineCollection({
       src: z.string(),
       poster: image().optional(),
       alt: z.string(),
-      caption: z.string().optional(),
     });
 
     return (

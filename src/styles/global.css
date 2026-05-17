@@ -292,31 +292,35 @@
   }
 
   .work-rib-copy {
-    min-height: 6.9625rem;
-    max-height: 6.9625rem;
+    min-height: 6.4rem;
+    max-height: 6.4rem;
   }
 
   .work-rib-header {
-    min-height: 2.3rem;
-    max-height: 2.3rem;
+    min-height: 3.05rem;
+    max-height: 3.05rem;
   }
 
   .work-summary-block {
     display: -webkit-box;
-    min-height: 3.4125rem;
-    max-height: 3.4125rem;
+    min-height: 2.8125rem;
+    max-height: 2.8125rem;
     overflow: hidden;
-    line-height: 1.1375rem;
+    font-size: 9pt;
+    line-height: 0.9375rem;
+    text-align: justify;
+    text-align-last: justify;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
   }
 
   .work-meta-block {
     display: block;
-    min-height: 1.1rem;
-    max-height: 1.1rem;
+    min-height: 1.35rem;
+    max-height: 1.35rem;
     overflow: hidden;
-    line-height: 1.1rem;
+    font-size: 12pt;
+    line-height: 1.35rem;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -329,9 +333,12 @@
 
   .work-title-block {
     display: -webkit-box;
-    min-height: 2.3rem;
-    max-height: 2.3rem;
+    min-height: 3.05rem;
+    max-height: 3.05rem;
     overflow: hidden;
+    font-size: 16pt;
+    line-height: 1.1;
+    text-align: left;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
@@ -365,11 +372,6 @@
       min-height: 0;
       overflow-y: auto;
       overflow-x: hidden;
-    }
-
-    .project-gallery-caption {
-      grid-column: 1;
-      grid-row: 2;
     }
 
     .project-gallery-filmstrip-inner::-webkit-scrollbar {

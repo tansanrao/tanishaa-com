@@ -96,14 +96,16 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
             )}
           </span>
 
-          <span class="flex min-w-0 flex-col">
-            <span class="text-[12px] uppercase tracking-[0.14em] text-ink/58">
-              {rib.mediumText}
+          <span class="work-rib-copy flex min-w-0 flex-col text-left">
+            <span class="work-rib-header grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-4">
+              <span class="work-title-block font-medium">
+                {rib.title}
+              </span>
+              <span class="work-meta-block min-w-[6rem] text-right font-light text-ink/72">
+                {rib.mediumText}
+              </span>
             </span>
-            <span class="mt-1 text-[18px] font-medium leading-[1.08]">
-              {rib.title}
-            </span>
-            <span class="body-copy-justify body-copy-index mt-2 w-full text-[13px] text-ink/90">{rib.summary}</span>
+            <span class="work-summary-block body-copy-justify body-copy-index mt-2 w-full text-ink/90">{rib.summary}</span>
           </span>
         </a>
       ))}
@@ -124,16 +126,16 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
                   data-work-rib
                   data-rib-id={`${rib.id}-left`}
                 >
-                  <span class="work-rib-copy col-start-1 row-start-2 flex min-w-0 flex-col text-right">
-                    <span class="work-rib-header grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-6">
-                      <span class="work-meta-block min-w-[8rem] text-left text-[15px] font-light text-ink/72">
-                        {rib.mediumText}
-                      </span>
-                      <span class="work-title-block justify-self-end text-right text-[16px] font-medium leading-[1.15]">
+                  <span class="work-rib-copy col-start-1 row-start-2 flex min-w-0 flex-col text-left">
+                    <span class="work-rib-header grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-6">
+                      <span class="work-title-block font-medium">
                         {rib.title}
                       </span>
+                      <span class="work-meta-block min-w-[8rem] text-right font-light text-ink/72">
+                        {rib.mediumText}
+                      </span>
                     </span>
-                    <span class="work-summary-block body-copy-justify body-copy-index mt-2 w-full text-[13px] text-ink/90">{rib.summary}</span>
+                    <span class="work-summary-block body-copy-justify body-copy-index mt-2 w-full text-ink/90">{rib.summary}</span>
                   </span>
 
                   <span class="col-start-2 row-start-1 block aspect-[122/73] w-[8.5rem] overflow-hidden" aria-hidden="true">
@@ -217,14 +219,14 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
 
                   <span class="work-rib-copy col-start-2 row-start-2 flex min-w-0 flex-col text-left">
                     <span class="work-rib-header grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-6">
-                      <span class="work-title-block text-left text-[16px] font-medium leading-[1.15]">
+                      <span class="work-title-block font-medium">
                         {rib.title}
                       </span>
-                      <span class="work-meta-block min-w-[8rem] text-right text-[15px] font-light text-ink/72">
+                      <span class="work-meta-block min-w-[8rem] text-right font-light text-ink/72">
                         {rib.mediumText}
                       </span>
                     </span>
-                    <span class="work-summary-block body-copy-justify body-copy-index mt-2 w-full text-[13px] text-ink/90">{rib.summary}</span>
+                    <span class="work-summary-block body-copy-justify body-copy-index mt-2 w-full text-ink/90">{rib.summary}</span>
                   </span>
                 </a>
               )}

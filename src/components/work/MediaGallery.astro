@@ -9,7 +9,6 @@ interface Props {
   stageAspect?: string;
   thumbAspect?: string;
   itemAspect?: string;
-  showInlineCaption?: boolean;
   showInlineControls?: boolean;
   showFullscreenButton?: boolean;
 }
@@ -21,7 +20,6 @@ const {
   stageAspect = '3 / 2',
   thumbAspect = stageAspect,
   itemAspect = '4 / 3',
-  showInlineCaption = layout === 'filmstrip',
   showInlineControls = layout === 'filmstrip',
   showFullscreenButton = layout === 'filmstrip',
 } = Astro.props as Props;
@@ -33,7 +31,6 @@ const viewerItems = gallery.map((item) => ({
   src: item.viewerSrc,
   posterSrc: item.type === 'video' ? item.poster?.src : undefined,
   alt: item.alt,
-  caption: item.caption,
   width: item.viewerWidth,
   height: item.viewerHeight,
 }));
@@ -200,12 +197,6 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
           </div>
         </div>
       )}
-
-      {showInlineCaption && (
-        <div class="project-gallery-caption order-2 min-h-[20px] text-[12px] uppercase tracking-[0.12em] text-ink/60 lg:order-none" data-gallery-caption>
-          {gallery[0]?.caption ?? gallery[0]?.alt}
-        </div>
-      )}
     </>
   ) : (
     <>
@@ -278,8 +269,6 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
           </button>
         )}
       </div>
-
-      <div class="min-h-[20px] max-w-[900px] text-center text-[12px] uppercase tracking-[0.12em] text-paper/72" data-viewer-caption></div>
     </div>
   </div>
 </section>
@@ -291,7 +280,6 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
       src: string;
       posterSrc?: string;
       alt: string;
-      caption?: string;
       width?: number;
       height?: number;
     };
@@ -328,13 +316,11 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
       const openButtons = Array.from(galleryRoot.querySelectorAll('[data-gallery-open]'));
       const prevButton = galleryRoot.querySelector('[data-gallery-prev]');
       const nextButton = galleryRoot.querySelector('[data-gallery-next]');
-      const caption = galleryRoot.querySelector('[data-gallery-caption]');
       const filmstrip = galleryRoot.querySelector('[data-gallery-filmstrip]');
       const filmstripScroll = galleryRoot.querySelector('[data-gallery-filmstrip-scroll]');
       const overlay = galleryRoot.querySelector('[data-viewer-overlay]');
       const viewerImage = galleryRoot.querySelector('[data-viewer-image]');
       const viewerVideo = galleryRoot.querySelector('[data-viewer-video]');
-      const viewerCaption = galleryRoot.querySelector('[data-viewer-caption]');
       const viewerCounter = galleryRoot.querySelector('[data-viewer-counter]');
       const viewerPrev = galleryRoot.querySelector('[data-viewer-prev]');
       const viewerNext = galleryRoot.querySelector('[data-viewer-next]');
@@ -391,11 +377,6 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
 
         pauseInactiveVideos();
 
-        const current = items[activeIndex];
-        if (caption instanceof HTMLElement && current) {
-          caption.textContent = current.caption ?? current.alt ?? '';
-        }
-
         syncThumbState();
       };
 
@@ -428,10 +409,6 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
           if (typeof current.height === 'number' && current.height > 0) {
             viewerImage.height = current.height;
           }
-        }
-
-        if (viewerCaption instanceof HTMLElement) {
-          viewerCaption.textContent = current.caption ?? current.alt ?? '';
         }
 
         if (viewerCounter instanceof HTMLElement) {
