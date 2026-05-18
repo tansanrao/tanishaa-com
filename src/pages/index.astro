@@ -1,16 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import HomeHero from '../components/home/HomeHero.astro';
 import HomeBio from '../components/home/HomeBio.astro';
+import HomeHero from '../components/home/HomeHero.astro';
 ---
 
 <Layout pageTitle="Tanishaa Rao — Home">
-  <div class="flex min-h-[calc(100vh-8rem)] w-full flex-col items-center justify-center gap-16">
+  <div class="home-page mobile-home-page flex min-h-[calc(100vh-8rem)] w-full flex-col items-center justify-center">
     <div class="flex w-full justify-center">
       <HomeHero />
     </div>
-    <div class="flex w-full justify-center">
-      <HomeBio />
+    <div class="mt-10 hidden w-full max-w-[720px] justify-center md:flex">
+      <HomeBio bodyClass="body-copy-home" />
     </div>
   </div>
 </Layout>

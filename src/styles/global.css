@@ -93,7 +93,7 @@
     display: block;
     inline-size: min(100%, var(--body-copy-inline-size, clamp(18rem, 58vw, 46rem)));
     text-align: justify;
-    text-align-last: justify;
+    text-align-last: auto;
     text-justify: inter-word;
     hyphens: none;
     overflow-wrap: break-word;
@@ -105,6 +105,10 @@
 
   .body-copy-hero {
     --body-copy-inline-size: min(100vw, 32.5rem);
+  }
+
+  .body-copy-home {
+    --body-copy-inline-size: 100%;
   }
 
   .body-copy-project {
@@ -244,9 +248,43 @@
     justify-content: center;
     border: 0;
     border-radius: 9999px;
-    background: #ffffff;
-    color: #1B1A1C;
+    background: #1B1A1C;
+    color: #F1EFEC;
     padding: 0;
+  }
+
+  .site-footer-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.22rem;
+  }
+
+  @media (min-width: 768px) {
+    .mobile-desktop-note {
+      display: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .mobile-home-page {
+      min-height: calc(100dvh - 8rem);
+    }
+
+    .mobile-home-page .home-hero,
+    .mobile-home-page .home-hero > div {
+      min-height: calc(100dvh - 8rem);
+      width: 100%;
+    }
+
+    .mobile-home-page .home-hero-frame {
+      height: calc(100dvh - 8rem);
+      width: 100%;
+      max-width: none;
+      border: 0;
+      aspect-ratio: auto;
+      background: #1B1A1C;
+    }
   }
 
   .mobile-nav-overlay {
@@ -268,7 +306,7 @@
   .mobile-nav-toggle-close {
     position: absolute;
     right: 1.5rem;
-    top: 2.25rem;
+    top: 1.125rem;
     background: rgba(27, 26, 28, 0.12);
   }
 
@@ -282,6 +320,13 @@
     font-weight: 500;
     line-height: 1;
     text-transform: uppercase;
+  }
+
+  @media (min-width: 640px) and (max-width: 767px) {
+    .mobile-nav-toggle-close {
+      right: 2rem;
+      top: 1.25rem;
+    }
   }
 
   @media (min-width: 768px) {
@@ -431,7 +476,7 @@
     font-size: 9pt;
     line-height: 0.9375rem;
     text-align: justify;
-    text-align-last: justify;
+    text-align-last: auto;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
   }
