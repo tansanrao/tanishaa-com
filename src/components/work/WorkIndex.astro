@@ -81,21 +81,21 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
 
     {orderedRibs.length > 0 && (
     <>
-    <div class="mx-auto flex w-full max-w-[42rem] flex-col gap-9 lg:hidden">
+    <div class="mx-auto flex w-full max-w-[30.5rem] flex-col gap-14 sm:max-w-[38rem] md:max-w-[42rem] lg:hidden">
       {orderedRibs.map((rib) => (
         <a
           href={rib.href}
-          class="grid w-full grid-cols-[7.5rem_minmax(0,1fr)] items-start gap-x-5 text-ink no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-accent focus-visible:outline-offset-2 min-[430px]:grid-cols-[8.5rem_minmax(0,1fr)]"
+          class="flex w-full flex-col text-ink no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-accent focus-visible:outline-offset-2"
           aria-label={rib.accessibleLabel}
         >
-          <span class="block aspect-[122/73] w-full overflow-hidden" aria-hidden="true">
+          <span class="block aspect-[5/4] w-full overflow-hidden" aria-hidden="true">
             {rib.image ? (
               <Image
                 class="h-full w-full object-cover"
                 src={rib.image.image}
                 alt=""
-                width="136"
-                height="81"
+                width="640"
+                height="512"
                 densities={[1, 2]}
                 fit="cover"
                 position="center"
@@ -108,16 +108,16 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
             )}
           </span>
 
-          <span class="work-rib-copy flex min-w-0 flex-col text-left">
-            <span class="work-rib-header flex min-w-0 flex-col items-start gap-1">
+          <span class="work-rib-copy mt-5 flex min-w-0 flex-col text-left">
+            <span class="work-rib-header grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-5">
               <span class="work-title-block font-medium">
                 {rib.title}
               </span>
-              <span class="work-meta-block font-light text-ink/64">
+              <span class="work-meta-block max-w-[42%] text-right font-light text-ink/64">
                 {rib.mediumText}
               </span>
             </span>
-            <span class="work-summary-block body-copy-justify body-copy-index mt-2 w-full text-ink/90">{rib.summary}</span>
+            <span class="work-summary-block body-copy-justify body-copy-index mt-7 w-full text-ink/90">{rib.summary}</span>
           </span>
         </a>
       ))}

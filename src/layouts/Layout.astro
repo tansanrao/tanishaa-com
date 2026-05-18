@@ -5,12 +5,12 @@ import '../styles/global.css';
 
 interface Props {
   pageTitle?: string;
-  activeNav?: 'work' | 'contact';
+  activeNav?: 'work' | 'about' | 'contact';
 }
 
 const { pageTitle = 'Tanishaa Rao — Portfolio', activeNav } = Astro.props;
 const pathname = Astro.url.pathname;
-const resolvedActiveNav = activeNav ?? (pathname.startsWith('/work') ? 'work' : pathname.startsWith('/contact') ? 'contact' : undefined);
+const resolvedActiveNav = activeNav ?? (pathname.startsWith('/work') ? 'work' : pathname.startsWith('/about') ? 'about' : pathname.startsWith('/contact') ? 'contact' : undefined);
 ---
 
 <!doctype html>

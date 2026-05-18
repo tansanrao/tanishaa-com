@@ -1,0 +1,15 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HomeBio from '../components/home/HomeBio.astro';
+---
+
+<Layout pageTitle="Tanishaa Rao — About" activeNav="about">
+  <section class="mx-auto flex min-h-[calc(100vh-10.5rem)] w-full items-center justify-center px-6 py-16">
+    <div class="flex w-full max-w-[30rem] flex-col items-center px-6 py-8 sm:px-10 sm:py-10">
+      <h1 class="text-center text-sm uppercase tracking-[0.1em]">About</h1>
+      <div class="mt-6">
+        <HomeBio />
+      </div>
+    </div>
+  </section>
+</Layout>
