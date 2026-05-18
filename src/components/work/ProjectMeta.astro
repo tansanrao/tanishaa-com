@@ -12,7 +12,7 @@ const { title, year, medium } = Astro.props;
   <div class="grid grid-cols-3 gap-4 border-t border-ink/12 pt-5 text-left sm:gap-6">
     <div class="space-y-1">
       <div class="font-accent text-[9pt] uppercase text-ink/48">Project</div>
-      <div class="text-[16pt] leading-[1.1] text-ink">{title}</div>
+      <div class="text-[12px] leading-[1.25] text-ink">{title}</div>
     </div>
 
     {year && (
@@ -25,7 +25,7 @@ const { title, year, medium } = Astro.props;
     {medium && (
       <div class="space-y-1 justify-self-end text-right">
         <div class="font-accent text-[9pt] uppercase text-ink/48">Medium</div>
-        <div class="text-[12pt] leading-[1.25] text-ink">{medium}</div>
+        <div class="text-[12px] leading-[1.25] text-ink">{medium}</div>
       </div>
     )}
   </div>
