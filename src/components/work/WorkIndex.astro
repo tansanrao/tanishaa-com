@@ -117,7 +117,7 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
                 {rib.mediumText}
               </span>
             </span>
-            <span class="work-summary-block body-copy-justify body-copy-index mt-7 w-full text-ink/90">{rib.summary}</span>
+            <span class="work-summary-block body-copy-justify body-copy-index mt-7 w-full text-ink/90" data-clamp-lines="3" data-full-text={rib.summary}>{rib.summary}</span>
           </span>
         </a>
       ))}
@@ -147,7 +147,7 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
                         {rib.mediumText}
                       </span>
                     </span>
-                    <span class="work-summary-block body-copy-justify body-copy-index mt-2 w-full text-ink/90">{rib.summary}</span>
+                    <span class="work-summary-block body-copy-justify body-copy-index mt-2 w-full text-ink/90" data-clamp-lines="3" data-full-text={rib.summary}>{rib.summary}</span>
                   </span>
 
                   <span class="col-start-2 row-start-1 block aspect-[122/73] w-[8.5rem] overflow-hidden" aria-hidden="true">
@@ -238,7 +238,7 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
                         {rib.mediumText}
                       </span>
                     </span>
-                    <span class="work-summary-block body-copy-justify body-copy-index mt-2 w-full text-ink/90">{rib.summary}</span>
+                    <span class="work-summary-block body-copy-justify body-copy-index mt-2 w-full text-ink/90" data-clamp-lines="3" data-full-text={rib.summary}>{rib.summary}</span>
                   </span>
                 </a>
               )}
@@ -252,6 +252,116 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
 </section>
 
 <script>
+  const initTextClamps = () => {
+    const clampTargets = document.querySelectorAll('[data-clamp-lines][data-full-text]');
+
+    const getMaxHeight = (element: HTMLElement) => {
+      const styles = window.getComputedStyle(element);
+      const lineHeight = Number.parseFloat(styles.lineHeight);
+      const clampLines = Number.parseInt(element.dataset.clampLines ?? '3', 10);
+
+      if (!Number.isFinite(lineHeight) || !Number.isFinite(clampLines)) {
+        return element.clientHeight;
+      }
+
+      return Math.ceil(lineHeight * clampLines);
+    };
+
+    const overflows = (element: HTMLElement, maxHeight: number) => element.scrollHeight > maxHeight + 1;
+
+    const trimTerminalPunctuation = (text: string) => text.replace(/[.,;:!?—–-]+$/, '').trimEnd();
+
+    const normalizeCandidate = (text: string, length: number) => {
+      const candidate = trimTerminalPunctuation(text.slice(0, length).trimEnd());
+
+      if (length >= text.length) {
+        return candidate;
+      }
+
+      const lastWordBoundary = Math.max(candidate.lastIndexOf(' '), candidate.lastIndexOf('\n'), candidate.lastIndexOf('\t'));
+
+      if (lastWordBoundary <= 0) {
+        return candidate;
+      }
+
+      return trimTerminalPunctuation(candidate.slice(0, lastWordBoundary).trimEnd());
+    };
+
+    const clampElement = (element: HTMLElement) => {
+      const fullText = element.dataset.fullText?.trim() ?? '';
+
+      if (!fullText) {
+        return;
+      }
+
+      element.textContent = fullText;
+
+      if (element.getBoundingClientRect().width <= 0) {
+        return;
+      }
+
+      const maxHeight = getMaxHeight(element);
+
+      if (!overflows(element, maxHeight)) {
+        return;
+      }
+
+      let low = 0;
+      let high = fullText.length;
+      let best = '';
+
+      while (low <= high) {
+        const mid = Math.floor((low + high) / 2);
+        const candidate = normalizeCandidate(fullText, mid);
+        element.textContent = `${candidate}...`;
+
+        if (candidate && !overflows(element, maxHeight)) {
+          best = candidate;
+          low = mid + 1;
+        } else {
+          high = mid - 1;
+        }
+      }
+
+      element.textContent = best ? `${best}...` : '...';
+    };
+
+    const clampAll = () => {
+      clampTargets.forEach((target) => {
+        if (target instanceof HTMLElement) {
+          clampElement(target);
+        }
+      });
+    };
+
+    let resizeTimer: number | undefined;
+
+    const scheduleClamp = () => {
+      if (resizeTimer !== undefined) {
+        window.clearTimeout(resizeTimer);
+      }
+
+      resizeTimer = window.setTimeout(() => {
+        window.requestAnimationFrame(clampAll);
+      }, 120);
+    };
+
+    clampAll();
+    window.addEventListener('load', clampAll, { once: true });
+    window.addEventListener('resize', scheduleClamp);
+    window.addEventListener(
+      'pagehide',
+      () => {
+        if (resizeTimer !== undefined) {
+          window.clearTimeout(resizeTimer);
+        }
+
+        window.removeEventListener('resize', scheduleClamp);
+      },
+      { once: true }
+    );
+  };
+
   const initDenseWorkIndex = () => {
     const ribs = document.querySelectorAll('[data-work-rib]');
     const timers = new Map<HTMLElement, number>();
@@ -311,8 +421,16 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
   };
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDenseWorkIndex, { once: true });
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => {
+        initTextClamps();
+        initDenseWorkIndex();
+      },
+      { once: true }
+    );
   } else {
+    initTextClamps();
     initDenseWorkIndex();
   }
 </script>

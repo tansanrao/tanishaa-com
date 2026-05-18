@@ -469,7 +469,7 @@
   }
 
   .work-summary-block {
-    display: -webkit-box;
+    display: block;
     min-height: 2.8125rem;
     max-height: 2.8125rem;
     overflow: hidden;
@@ -477,8 +477,6 @@
     line-height: 0.9375rem;
     text-align: justify;
     text-align-last: auto;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
   }
 
   .work-meta-block {
@@ -673,7 +671,6 @@
       max-height: 2.8125rem;
       font-size: 9pt;
       line-height: 0.9375rem;
-      -webkit-line-clamp: 3;
     }
 
     .viewer-icon-button-inline {
