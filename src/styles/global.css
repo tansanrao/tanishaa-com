@@ -241,6 +241,24 @@
 
   .process-gallery-card {
     aspect-ratio: var(--gallery-item-aspect, 4 / 3);
+    display: block;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    padding: 0;
+  }
+
+  .process-gallery-card picture,
+  .process-gallery-card img {
+    display: block;
+    height: 100% !important;
+    width: 100%;
+  }
+
+  .process-gallery-card img {
+    max-width: none;
+    object-fit: cover;
+    object-position: center;
   }
 
   .process-gallery-card:hover {
