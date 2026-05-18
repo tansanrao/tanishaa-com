@@ -6,8 +6,7 @@ export default {
       colors: {
         paper: '#F1EFEC',
         ink: '#1B1A1C',
-        accent: '#DA3832',
-        'nav-active': '#002eff',
+        accent: '#002eff',
       },
       fontFamily: {
         sans: ['"Schibsted Grotesk"', 'ui-sans-serif', 'system-ui', 'sans-serif'],

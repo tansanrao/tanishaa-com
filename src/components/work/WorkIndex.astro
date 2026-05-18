@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import type { WorkProject } from '../../lib/work';
+import type { WorkCategory, WorkProject } from '../../lib/work';
+import WorkTabs from './WorkTabs.astro';
 import scan1 from '../../assets/work-spine/Scan1.jpg';
 import scan2 from '../../assets/work-spine/Scan2.jpg';
 import scan3 from '../../assets/work-spine/Scan3.jpg';
@@ -12,6 +13,7 @@ import scan8 from '../../assets/work-spine/Scan8.jpg';
 
 interface Props {
   projects: WorkProject[];
+  activeCategory: WorkCategory;
 }
 
 interface DenseRibItem {
@@ -24,7 +26,7 @@ interface DenseRibItem {
   accessibleLabel: string;
 }
 
-const { projects } = Astro.props as Props;
+const { projects, activeCategory } = Astro.props as Props;
 
 const UNTITLED_PROJECT = 'Untitled Project';
 const MEDIUM_PLACEHOLDER = 'Medium TBD';
@@ -42,7 +44,7 @@ const toRibItem = (project: WorkProject): DenseRibItem => {
   return {
     id: project.id,
     title,
-    href: `/work/${project.id}`,
+    href: `/work/${project.category}/${project.id}`,
     image,
     mediumText,
     summary,
@@ -69,6 +71,16 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
 ---
 
 <section class="mx-auto w-full max-w-[1360px] px-6 pb-24 pt-12 font-editorial text-ink lg:px-10">
+    <WorkTabs activeCategory={activeCategory} />
+
+    {orderedRibs.length === 0 && (
+      <p class="mx-auto mt-24 max-w-[26rem] text-center font-accent text-[10pt] uppercase tracking-[0.16em] text-ink/52">
+        No projects are published here yet.
+      </p>
+    )}
+
+    {orderedRibs.length > 0 && (
+    <>
     <div class="flex flex-col gap-8 lg:hidden">
       {orderedRibs.map((rib) => (
         <a
@@ -235,6 +247,8 @@ const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.leng
         })}
       </div>
     </div>
+    </>
+    )}
 </section>
 
 <script>

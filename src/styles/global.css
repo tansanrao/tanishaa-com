@@ -4,8 +4,7 @@
 @theme {
   --color-paper: #F1EFEC;
   --color-ink: #1B1A1C;
-  --color-accent: #DA3832;
-  --color-nav-active: #002eff;
+  --color-accent: #002eff;
   --font-sans: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-accent: "Almarai", sans-serif;
   --font-editorial: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -45,7 +44,7 @@
   }
 
   ::selection {
-    background-color: #DA3832;
+    background-color: #002eff;
     color: #F1EFEC;
   }
 }
@@ -74,7 +73,7 @@
   }
 
   .focus-visible-outline:focus-visible {
-    outline: 1px solid #DA3832;
+    outline: 1px solid #002eff;
     outline-offset: 2px;
   }
 
@@ -222,6 +221,37 @@
     width: 100%;
   }
 
+  .work-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1.65rem;
+    margin-bottom: 6.5rem;
+  }
+
+  .work-tab-button {
+    display: inline-flex;
+    min-height: 1.35rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(27, 26, 28, 0.42);
+    padding: 0.12rem 0.55rem 0.08rem;
+    font-family: "Almarai", sans-serif;
+    font-size: 8px;
+    line-height: 1;
+    text-transform: uppercase;
+    color: rgba(27, 26, 28, 0.72);
+    background: transparent;
+    transition:
+      border-color 160ms ease,
+      color 160ms ease;
+  }
+
+  .work-tab-button:hover,
+  .work-tab-button.is-active {
+    border-color: #002eff;
+    color: #002eff;
+  }
+
   .work-process-section {
     display: grid;
     gap: 2rem;
@@ -276,6 +306,10 @@
     max-height: calc(100vh - 10rem);
   }
 
+  .viewer-caption {
+    min-height: 1.1rem;
+  }
+
   .viewer-icon-button {
     display: inline-flex;
     align-items: center;
@@ -295,7 +329,7 @@
   }
 
   .viewer-icon-button:hover {
-    border-color: rgba(218, 56, 50, 0.9);
+    border-color: rgba(0, 46, 255, 0.9);
     color: #ffffff;
     transform: translateY(-1px);
   }

@@ -1,0 +1,30 @@
+---
+import type { WorkCategory } from '../../lib/work';
+
+interface Props {
+  activeCategory: WorkCategory;
+}
+
+const { activeCategory } = Astro.props as Props;
+
+const tabs: Array<{ category: WorkCategory; label: string; href: string }> = [
+  { category: 'studio', label: 'Studio Projects', href: '/work/studio' },
+  { category: 'independent', label: 'Independent Work', href: '/work/independent' },
+];
+---
+
+<nav class="work-tabs" aria-label="Work categories">
+  {tabs.map((tab) => {
+    const isActive = tab.category === activeCategory;
+
+    return (
+      <a
+        href={tab.href}
+        class:list={['work-tab-button focus-visible-outline', isActive ? 'is-active' : '']}
+        aria-current={isActive ? 'page' : undefined}
+      >
+        {tab.label}
+      </a>
+    );
+  })}
+</nav>

@@ -9,6 +9,7 @@ const work = defineCollection({
       type: z.literal('image').default('image'),
       src: image(),
       alt: z.string(),
+      caption: z.string().optional(),
     });
 
     const videoMedia = z.object({
@@ -18,9 +19,10 @@ const work = defineCollection({
       alt: z.string(),
     });
 
-    return (
-    z.object({
+    return z
+    .object({
       title: z.string(),
+      category: z.enum(['studio', 'independent']).default('studio'),
       year: z.string(),
       medium: z.string().optional(),
       order: z.number(),
@@ -41,7 +43,21 @@ const work = defineCollection({
         )
         .default([]),
     })
-    );
+    .superRefine((data, ctx) => {
+      if (data.category !== 'independent') {
+        return;
+      }
+
+      data.mainGallery.forEach((item, index) => {
+        if (item.type === 'image' && !item.caption?.trim()) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['mainGallery', index, 'caption'],
+            message: 'Independent work gallery images require captions.',
+          });
+        }
+      });
+    });
   },
 });
 

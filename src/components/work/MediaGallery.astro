@@ -31,6 +31,7 @@ const viewerItems = gallery.map((item) => ({
   src: item.viewerSrc,
   posterSrc: item.type === 'video' ? item.poster?.src : undefined,
   alt: item.alt,
+  caption: item.type === 'image' ? item.caption : undefined,
   width: item.viewerWidth,
   height: item.viewerHeight,
 }));
@@ -269,6 +270,8 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
           </button>
         )}
       </div>
+
+      <p class="viewer-caption hidden max-w-[1400px] text-center font-accent text-[10pt] leading-[1.45] text-paper/78" data-viewer-caption></p>
     </div>
   </div>
 </section>
@@ -280,6 +283,7 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
       src: string;
       posterSrc?: string;
       alt: string;
+      caption?: string;
       width?: number;
       height?: number;
     };
@@ -322,6 +326,7 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
       const viewerImage = galleryRoot.querySelector('[data-viewer-image]');
       const viewerVideo = galleryRoot.querySelector('[data-viewer-video]');
       const viewerCounter = galleryRoot.querySelector('[data-viewer-counter]');
+      const viewerCaption = galleryRoot.querySelector('[data-viewer-caption]');
       const viewerPrev = galleryRoot.querySelector('[data-viewer-prev]');
       const viewerNext = galleryRoot.querySelector('[data-viewer-next]');
       const viewerCloseButtons = galleryRoot.querySelectorAll('[data-viewer-close], [data-viewer-dismiss]');
@@ -413,6 +418,12 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
 
         if (viewerCounter instanceof HTMLElement) {
           viewerCounter.textContent = `${activeIndex + 1} / ${items.length}`;
+        }
+
+        if (viewerCaption instanceof HTMLElement) {
+          const caption = current.caption?.trim() ?? '';
+          viewerCaption.textContent = caption;
+          viewerCaption.classList.toggle('hidden', !caption);
         }
       };
 

@@ -6,7 +6,7 @@ interface Props {
 const { active } = Astro.props;
 
 const linkClass = (isActive: boolean) =>
-  `transition-colors hover:text-accent focus-visible-outline ${isActive ? 'text-nav-active' : 'text-ink'}`;
+  `transition-colors hover:text-accent focus-visible-outline ${isActive ? 'text-accent' : 'text-ink'}`;
 ---
 
 <header class="w-full">

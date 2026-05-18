@@ -12,10 +12,13 @@ type WorkMediaEntry = WorkEntry['data']['mainGallery'][number];
 type WorkImageMediaEntry = WorkEntry['data']['processGallery'][number];
 type ViewerTransform = Awaited<ReturnType<typeof getImage>>;
 
+export type WorkCategory = WorkEntry['data']['category'];
+
 export interface WorkImageMedia {
   type: 'image';
   image: WorkImage;
   alt: string;
+  caption?: string;
   viewerSrc: string;
   viewerWidth: number;
   viewerHeight: number;
@@ -36,6 +39,7 @@ export type WorkMedia = WorkImageMedia | WorkVideoMedia;
 export interface WorkProject {
   id: string;
   title: string;
+  category: WorkCategory;
   order: number;
   year: string;
   medium?: string;
@@ -67,6 +71,7 @@ const toImageMedia = async (item: WorkImageMediaEntry): Promise<WorkImageMedia> 
     type: 'image',
     image: item.src,
     alt: item.alt,
+    caption: item.caption,
     viewerSrc: viewer.src,
     ...toViewerDimensions(viewer),
   };
@@ -165,6 +170,7 @@ const normalizeWorkEntry = async (entry: WorkEntry): Promise<WorkProject> => {
   return {
     id: entry.id,
     title: entry.data.title,
+    category: entry.data.category,
     order: entry.data.order,
     year: entry.data.year,
     medium: entry.data.medium,
@@ -178,14 +184,16 @@ const normalizeWorkEntry = async (entry: WorkEntry): Promise<WorkProject> => {
   };
 };
 
-export const getWorkProjects = async () => {
+export const getWorkProjects = async (category?: WorkCategory) => {
   const entries = await getCollection('work');
   const projects = await Promise.all(entries.map(normalizeWorkEntry));
-  return projects.sort((left, right) => left.order - right.order);
+  return projects
+    .filter((project) => !category || project.category === category)
+    .sort((left, right) => left.order - right.order);
 };
 
-export const getWorkProject = async (id: string) => {
-  const entries = await getCollection('work', (entry) => entry.id === id);
+export const getWorkProject = async (id: string, category?: WorkCategory) => {
+  const entries = await getCollection('work', (entry) => entry.id === id && (!category || entry.data.category === category));
   const [entry] = entries;
   return entry ? normalizeWorkEntry(entry) : undefined;
 };
