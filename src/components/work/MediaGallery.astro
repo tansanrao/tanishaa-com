@@ -35,6 +35,7 @@ const viewerItems = gallery.map((item) => ({
   width: item.viewerWidth,
   height: item.viewerHeight,
 }));
+const initialInlineCaption = viewerItems[0]?.caption?.trim() ?? '';
 const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
   const widths = [...new Set(candidates.filter((width) => width < maxWidth).concat(maxWidth))];
   return widths.sort((left, right) => left - right);
@@ -140,6 +141,15 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
             </div>
           )}
         </div>
+        <p
+          class:list={[
+            'project-gallery-inline-caption',
+            !initialInlineCaption ? 'hidden' : '',
+          ]}
+          data-gallery-inline-caption
+        >
+          {initialInlineCaption}
+        </p>
       </div>
 
       {hasMultipleItems && (
@@ -327,6 +337,7 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
       const viewerVideo = galleryRoot.querySelector('[data-viewer-video]');
       const viewerCounter = galleryRoot.querySelector('[data-viewer-counter]');
       const viewerCaption = galleryRoot.querySelector('[data-viewer-caption]');
+      const inlineCaption = galleryRoot.querySelector('[data-gallery-inline-caption]');
       const viewerPrev = galleryRoot.querySelector('[data-viewer-prev]');
       const viewerNext = galleryRoot.querySelector('[data-viewer-next]');
       const viewerCloseButtons = galleryRoot.querySelectorAll('[data-viewer-close], [data-viewer-dismiss]');
@@ -374,6 +385,16 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
         });
       };
 
+      const syncInlineCaption = () => {
+        if (!(inlineCaption instanceof HTMLElement)) {
+          return;
+        }
+
+        const caption = items[activeIndex]?.caption?.trim() ?? '';
+        inlineCaption.textContent = caption;
+        inlineCaption.classList.toggle('hidden', !caption);
+      };
+
       const syncInlineState = () => {
         slides.forEach((slide, index) => {
           slide.classList.toggle('hidden', index !== activeIndex);
@@ -383,6 +404,7 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
         pauseInactiveVideos();
 
         syncThumbState();
+        syncInlineCaption();
       };
 
       const syncViewerState = () => {

@@ -176,6 +176,17 @@
     color: inherit;
   }
 
+  .project-gallery-inline-caption {
+    margin: 1.35rem 0 0;
+    font-family: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    line-height: 1.4;
+    color: rgba(27, 26, 28, 0.58);
+    text-transform: uppercase;
+  }
+
   .project-gallery-filmstrip {
     min-height: 0;
   }
