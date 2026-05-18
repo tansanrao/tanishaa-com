@@ -33,6 +33,10 @@
     overflow: hidden;
   }
 
+  body.mobile-nav-open {
+    overflow: hidden;
+  }
+
   a {
     color: inherit;
     text-decoration: none;
@@ -232,6 +236,61 @@
     width: 100%;
   }
 
+  .mobile-nav-toggle {
+    display: inline-flex;
+    width: 2.05rem;
+    height: 2.05rem;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 9999px;
+    background: #ffffff;
+    color: #1B1A1C;
+    padding: 0;
+  }
+
+  .mobile-nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: flex;
+    min-height: 100dvh;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    color: #1B1A1C;
+  }
+
+  .mobile-nav-overlay[hidden] {
+    display: none;
+  }
+
+  .mobile-nav-toggle-close {
+    position: absolute;
+    right: 1.5rem;
+    top: 2.25rem;
+    background: rgba(27, 26, 28, 0.12);
+  }
+
+  .mobile-nav-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1rem;
+    font-family: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.34rem;
+    font-weight: 500;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 768px) {
+    .mobile-nav-toggle,
+    .mobile-nav-overlay {
+      display: none;
+    }
+  }
+
   .work-tabs {
     display: flex;
     justify-content: center;
@@ -411,6 +470,24 @@
     width: 100%;
   }
 
+  .project-meta-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(5rem, auto);
+  }
+
+  .project-meta-project {
+    grid-column: 1 / -1;
+  }
+
+  .project-meta-year {
+    justify-self: start;
+    text-align: left;
+  }
+
+  .project-meta-medium {
+    justify-self: end;
+    text-align: right;
+  }
+
   @media (min-width: 1024px) {
     .work-detail-content {
       max-width: 60rem;
@@ -481,7 +558,86 @@
     }
   }
 
+  @media (min-width: 640px) {
+    .project-meta-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .project-meta-project {
+      grid-column: auto;
+    }
+
+    .project-meta-year {
+      justify-self: center;
+      text-align: center;
+    }
+
+    .project-meta-medium {
+      justify-self: end;
+      text-align: right;
+    }
+  }
+
   @media (max-width: 1023px) {
+    .work-tabs {
+      gap: 1rem;
+      margin-bottom: 2.625rem;
+    }
+
+    .work-tab-button {
+      min-height: 2.75rem;
+      padding: 0.35rem 0.85rem 0.28rem;
+      font-size: 9px;
+    }
+
+    .work-rib-copy {
+      min-height: 0;
+      max-height: none;
+    }
+
+    .work-rib-header {
+      min-height: 0;
+      max-height: none;
+    }
+
+    .work-title-block {
+      min-height: 0;
+      max-height: none;
+      overflow: visible;
+      font-size: 15pt;
+      line-height: 1.06;
+      -webkit-line-clamp: unset;
+    }
+
+    .work-meta-block {
+      min-height: 0;
+      max-height: none;
+      overflow: visible;
+      font-size: 11pt;
+      line-height: 1.2;
+      text-overflow: clip;
+      white-space: normal;
+    }
+
+    .viewer-icon-button-inline {
+      min-height: 2.35rem;
+      min-width: 2.35rem;
+    }
+
+    .viewer-icon-button-inline span {
+      font-size: 1.25rem;
+    }
+
+    .viewer-icon-button-compact {
+      min-height: 2rem;
+      min-width: 2rem;
+    }
+
+    .viewer-icon-button-compact svg {
+      height: 0.85rem;
+      width: 0.85rem;
+    }
+
     .project-gallery-filmstrip {
       overflow-x: auto;
       overflow-y: hidden;

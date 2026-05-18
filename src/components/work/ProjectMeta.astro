@@ -9,21 +9,21 @@ const { title, year, medium } = Astro.props;
 ---
 
 <section class="space-y-8">
-  <div class="grid grid-cols-3 gap-4 border-t border-ink/12 pt-5 text-left sm:gap-6">
-    <div class="space-y-1">
+  <div class="project-meta-grid grid gap-x-4 gap-y-5 border-t border-ink/12 pt-5 text-left sm:gap-6">
+    <div class="space-y-1 project-meta-project">
       <div class="font-accent text-[9pt] uppercase text-ink/48">Project</div>
       <div class="text-[12px] leading-[1.25] text-ink">{title}</div>
     </div>
 
     {year && (
-      <div class="space-y-1 justify-self-center text-center">
+      <div class="project-meta-year space-y-1">
         <div class="font-accent text-[9pt] uppercase text-ink/48">Year</div>
         <div class="text-[9pt] leading-[1.45] text-ink">{year}</div>
       </div>
     )}
 
     {medium && (
-      <div class="space-y-1 justify-self-end text-right">
+      <div class="project-meta-medium space-y-1">
         <div class="font-accent text-[9pt] uppercase text-ink/48">Medium</div>
         <div class="text-[12px] leading-[1.25] text-ink">{medium}</div>
       </div>

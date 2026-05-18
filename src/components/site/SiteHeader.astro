@@ -9,11 +9,11 @@ const linkClass = (isActive: boolean) =>
   `transition-colors hover:text-accent focus-visible-outline ${isActive ? 'text-accent' : 'text-ink'}`;
 ---
 
-<header class="w-full">
-  <nav class="w-full max-w-[1280px] mx-auto px-8 pt-10" aria-label="Primary">
+<header class="site-header w-full">
+  <nav class="w-full max-w-[1280px] mx-auto px-6 pt-9 sm:px-8 sm:pt-10" aria-label="Primary">
     <div class="flex items-center justify-between text-[12px] uppercase tracking-[0.08em] text-ink">
       <a href="/" class="font-medium transition-colors hover:text-accent focus-visible-outline">Tanishaa Rao</a>
-      <div class="flex items-center gap-10">
+      <div class="hidden items-center gap-10 md:flex">
         <a href="/work" class={linkClass(active === 'work')} aria-current={active === 'work' ? 'page' : undefined}>Work</a>
         <a
           href="/contact"
@@ -23,6 +23,87 @@ const linkClass = (isActive: boolean) =>
           Contact
         </a>
       </div>
+      <button
+        type="button"
+        class="mobile-nav-toggle focus-visible-outline md:hidden"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-nav-overlay"
+        data-mobile-nav-toggle
+      >
+        <span class="sr-only">Open navigation menu</span>
+      </button>
     </div>
   </nav>
+
+  <div
+    id="mobile-nav-overlay"
+    class="mobile-nav-overlay md:hidden"
+    hidden
+    data-mobile-nav-overlay
+  >
+    <button
+      type="button"
+      class="mobile-nav-toggle mobile-nav-toggle-close focus-visible-outline"
+      aria-label="Close navigation menu"
+      data-mobile-nav-close
+    >
+      <span class="sr-only">Close navigation menu</span>
+    </button>
+
+    <nav class="mobile-nav-menu" aria-label="Mobile primary">
+      <a href="/" class="focus-visible-outline" data-mobile-nav-link>Home</a>
+      <a href="/work" class="focus-visible-outline" data-mobile-nav-link>Work</a>
+      <a href="/contact" class="focus-visible-outline" data-mobile-nav-link>Contact</a>
+    </nav>
+  </div>
 </header>
+
+<script>
+  const initMobileNav = () => {
+    const toggle = document.querySelector('[data-mobile-nav-toggle]');
+    const overlay = document.querySelector('[data-mobile-nav-overlay]');
+    const closeButton = document.querySelector('[data-mobile-nav-close]');
+    const links = document.querySelectorAll('[data-mobile-nav-link]');
+
+    if (!(toggle instanceof HTMLButtonElement) || !(overlay instanceof HTMLElement) || toggle.dataset.bound === 'true') {
+      return;
+    }
+
+    toggle.dataset.bound = 'true';
+    let previousFocus: HTMLElement | null = null;
+
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      overlay.hidden = !open;
+      document.body.classList.toggle('mobile-nav-open', open);
+
+      if (open) {
+        previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : toggle;
+        if (closeButton instanceof HTMLButtonElement) {
+          closeButton.focus();
+        }
+        return;
+      }
+
+      previousFocus?.focus();
+      previousFocus = null;
+    };
+
+    toggle.addEventListener('click', () => setOpen(true));
+    closeButton?.addEventListener('click', () => setOpen(false));
+    links.forEach((link) => link.addEventListener('click', () => setOpen(false)));
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !overlay.hidden) {
+        setOpen(false);
+      }
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileNav, { once: true });
+  } else {
+    initMobileNav();
+  }
+</script>

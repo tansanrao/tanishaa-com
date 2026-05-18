@@ -103,10 +103,10 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
           ))}
 
           {hasMultipleItems && showInlineControls && (
-            <div class="pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4 sm:px-5">
+            <div class="pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-between px-3 sm:px-5">
               <button
                 type="button"
-                class="viewer-icon-button pointer-events-auto"
+                class="viewer-icon-button viewer-icon-button-inline pointer-events-auto"
                 data-gallery-prev
                 aria-label="Previous media item"
               >
@@ -114,7 +114,7 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
               </button>
               <button
                 type="button"
-                class="viewer-icon-button pointer-events-auto"
+                class="viewer-icon-button viewer-icon-button-inline pointer-events-auto"
                 data-gallery-next
                 aria-label="Next media item"
               >
@@ -124,7 +124,7 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
           )}
 
           {showFullscreenButton && (
-            <div class="absolute bottom-3 right-3 z-10">
+            <div class="absolute bottom-2 right-2 z-10 sm:bottom-3 sm:right-3">
               <button
                 type="button"
                 class="viewer-icon-button viewer-icon-button-compact"
