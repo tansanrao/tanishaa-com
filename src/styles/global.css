@@ -501,8 +501,8 @@
     min-height: 3.05rem;
     max-height: 3.05rem;
     overflow: hidden;
-    font-size: 16pt;
-    line-height: 1.1;
+    font-size: 12pt;
+    line-height: 1.35rem;
     text-align: left;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
