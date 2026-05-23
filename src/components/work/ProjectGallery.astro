@@ -5,9 +5,10 @@ import MediaGallery from './MediaGallery.astro';
 interface Props {
   gallery: WorkMedia[];
   title: string;
+  showCaptions?: boolean;
 }
 
-const { gallery, title } = Astro.props as Props;
+const { gallery, title, showCaptions = true } = Astro.props as Props;
 ---
 
 <MediaGallery
@@ -19,4 +20,5 @@ const { gallery, title } = Astro.props as Props;
   itemAspect="3 / 2"
   showInlineControls={true}
   showFullscreenButton={true}
+  showCaptions={showCaptions}
 />

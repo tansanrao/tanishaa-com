@@ -29,7 +29,7 @@ const showProcess = project.category === 'studio';
     </h1>
 
     <div class="mt-9 lg:col-span-12">
-      <ProjectGallery gallery={project.mainGallery} title={project.title} />
+      <ProjectGallery gallery={project.mainGallery} title={project.title} showCaptions={project.category !== 'independent'} />
     </div>
 
     <div class="mt-7 lg:col-span-12">

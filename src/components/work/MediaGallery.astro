@@ -11,6 +11,7 @@ interface Props {
   itemAspect?: string;
   showInlineControls?: boolean;
   showFullscreenButton?: boolean;
+  showCaptions?: boolean;
 }
 
 const {
@@ -22,6 +23,7 @@ const {
   itemAspect = '4 / 3',
   showInlineControls = layout === 'filmstrip',
   showFullscreenButton = layout === 'filmstrip',
+  showCaptions = true,
 } = Astro.props as Props;
 
 const hasMultipleItems = gallery.length > 1;
@@ -31,7 +33,7 @@ const viewerItems = gallery.map((item) => ({
   src: item.viewerSrc,
   posterSrc: item.type === 'video' ? item.poster?.src : undefined,
   alt: item.alt,
-  caption: item.type === 'image' ? item.caption : undefined,
+  caption: showCaptions && item.type === 'image' ? item.caption : undefined,
   width: item.viewerWidth,
   height: item.viewerHeight,
 }));
@@ -144,11 +146,11 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
         <p
           class:list={[
             'project-gallery-inline-caption',
-            !initialInlineCaption ? 'hidden' : '',
+            !showCaptions || !initialInlineCaption ? 'hidden' : '',
           ]}
           data-gallery-inline-caption
         >
-          {initialInlineCaption}
+          {showCaptions ? initialInlineCaption : ''}
         </p>
       </div>
 
