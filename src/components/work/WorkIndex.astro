@@ -2,25 +2,16 @@
 import { Image } from 'astro:assets';
 import type { WorkCategory, WorkProject } from '../../lib/work';
 import WorkTabs from './WorkTabs.astro';
-import scan1 from '../../assets/work-spine/Scan1.jpg';
-import scan2 from '../../assets/work-spine/Scan2.jpg';
-import scan3 from '../../assets/work-spine/Scan3.jpg';
-import scan4 from '../../assets/work-spine/Scan4.jpg';
-import scan5 from '../../assets/work-spine/Scan5.jpg';
-import scan6 from '../../assets/work-spine/Scan6.jpg';
-import scan7 from '../../assets/work-spine/Scan7.jpg';
-import scan8 from '../../assets/work-spine/Scan8.jpg';
 
 interface Props {
   projects: WorkProject[];
   activeCategory: WorkCategory;
 }
 
-interface DenseRibItem {
-  id: string;
+interface WorkGridItem {
   title: string;
   href: string;
-  image?: WorkProject['listingImage'];
+  image: WorkProject['listingImage'];
   mediumText: string;
   summary: string;
   accessibleLabel: string;
@@ -31,406 +22,65 @@ const { projects, activeCategory } = Astro.props as Props;
 const UNTITLED_PROJECT = 'Untitled Project';
 const MEDIUM_PLACEHOLDER = 'Medium TBD';
 const SUMMARY_PLACEHOLDER = 'Summary coming soon.';
-const COVER_PLACEHOLDER = 'Cover coming soon';
 
 const normalizeText = (value?: string) => value?.trim() ?? '';
 
-const toRibItem = (project: WorkProject): DenseRibItem => {
+const gridItems: WorkGridItem[] = projects.map((project) => {
   const title = normalizeText(project.title) || UNTITLED_PROJECT;
   const mediumText = normalizeText(project.medium) || MEDIUM_PLACEHOLDER;
   const summary = normalizeText(project.indexSummary) || SUMMARY_PLACEHOLDER;
-  const image = project.listingImage?.image ? project.listingImage : undefined;
 
   return {
-    id: project.id,
     title,
     href: `/work/${project.category}/${project.id}`,
-    image,
+    image: project.listingImage,
     mediumText,
     summary,
     accessibleLabel: `${title}, ${mediumText}`,
   };
-};
-
-const orderedRibs = projects.map(toRibItem);
-const sternumFrames = [scan1, scan2, scan3, scan4, scan5, scan6, scan7, scan8];
-
-const leftRibs: DenseRibItem[] = [];
-const rightRibs: DenseRibItem[] = [];
-
-projects.forEach((project, index) => {
-  if (index % 2 === 0) {
-    leftRibs.push(toRibItem(project));
-    return;
-  }
-
-  rightRibs.push(toRibItem(project));
 });
-
-const rowIndexes = Array.from({ length: Math.max(leftRibs.length, rightRibs.length) }, (_, index) => index);
 ---
 
-<section class="mx-auto w-full max-w-[1360px] px-6 pb-24 pt-6 font-editorial text-ink lg:px-10 lg:pt-12">
-    <WorkTabs activeCategory={activeCategory} />
+<section class="work-index mx-auto w-full max-w-[1280px] px-6 pb-24 pt-6 font-editorial text-ink sm:px-8 lg:px-10 lg:pt-12">
+  <WorkTabs activeCategory={activeCategory} />
 
-    {orderedRibs.length === 0 && (
-      <p class="mx-auto mt-24 max-w-[26rem] text-center font-accent text-[10pt] uppercase tracking-[0.16em] text-ink/52">
-        No projects are published here yet.
-      </p>
-    )}
+  {gridItems.length === 0 && (
+    <p class="mx-auto mt-24 max-w-[26rem] text-center font-accent text-[10pt] uppercase tracking-[0.16em] text-ink/52">
+      No projects are published here yet.
+    </p>
+  )}
 
-    {orderedRibs.length > 0 && (
-    <>
-    <div class="mx-auto flex w-full max-w-[30.5rem] flex-col gap-14 sm:max-w-[38rem] md:max-w-[42rem] lg:hidden">
-      {orderedRibs.map((rib) => (
+  {gridItems.length > 0 && (
+    <div class="work-grid">
+      {gridItems.map((item) => (
         <a
-          href={rib.href}
-          class="flex w-full flex-col text-ink no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-accent focus-visible:outline-offset-2"
-          aria-label={rib.accessibleLabel}
+          href={item.href}
+          class="work-grid-card focus-visible-outline"
+          aria-label={item.accessibleLabel}
         >
-          <span class="block aspect-[5/4] w-full overflow-hidden" aria-hidden="true">
-            {rib.image ? (
-              <Image
-                class="h-full w-full object-cover"
-                src={rib.image.image}
-                alt=""
-                width="640"
-                height="512"
-                densities={[1, 2]}
-                fit="cover"
-                position="center"
-                loading="lazy"
-              />
-            ) : (
-              <span class="flex h-full w-full items-center justify-center border border-dashed border-black/25 bg-black/10 text-[9px] uppercase tracking-[0.18em] text-black/55">
-                {COVER_PLACEHOLDER}
-              </span>
-            )}
+          <span class="work-grid-image" aria-hidden="true">
+            <Image
+              class="h-full w-full object-cover"
+              src={item.image.image}
+              alt=""
+              width="720"
+              height="360"
+              densities={[1, 2]}
+              fit="cover"
+              position="center"
+              loading="lazy"
+            />
           </span>
 
-          <span class="work-rib-copy mt-5 flex min-w-0 flex-col text-left">
-            <span class="work-rib-header grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-5">
-              <span class="work-title-block font-medium">
-                {rib.title}
-              </span>
-              <span class="work-meta-block max-w-[42%] text-right font-light text-ink/64">
-                {rib.mediumText}
-              </span>
+          <span class="work-grid-copy">
+            <span class="work-grid-meta-row">
+              <span class="work-grid-medium">{item.mediumText}</span>
+              <span class="work-grid-title">{item.title}</span>
             </span>
-            <span class="work-summary-block body-copy-justify body-copy-index mt-7 w-full text-ink/90" data-clamp-lines="3" data-full-text={rib.summary}>{rib.summary}</span>
+            <span class="work-grid-summary">{item.summary}</span>
           </span>
         </a>
       ))}
     </div>
-
-    <div class="hidden grid-cols-1 items-start justify-center gap-y-8 lg:grid lg:gap-x-10 lg:gap-y-0 lg:[grid-template-columns:minmax(24rem,31rem)_3.75rem_minmax(24rem,31rem)]">
-      <div class="flex w-full flex-col gap-y-0 justify-self-end">
-        {rowIndexes.map((rowIndex) => {
-          const rib = leftRibs[rowIndex];
-
-          return (
-            <div class="w-full">
-              {rib && (
-                <a
-                  href={rib.href}
-                  class="grid w-full cursor-default grid-cols-[minmax(0,1fr)_8.5rem] grid-rows-[auto_auto] items-start gap-x-7 gap-y-0 text-ink no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-accent focus-visible:outline-offset-2"
-                  aria-label={rib.accessibleLabel}
-                  data-work-rib
-                  data-rib-id={`${rib.id}-left`}
-                >
-                  <span class="work-rib-copy col-start-1 row-start-2 flex min-w-0 flex-col text-left">
-                    <span class="work-rib-header grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-6">
-                      <span class="work-title-block font-medium">
-                        {rib.title}
-                      </span>
-                      <span class="work-meta-block min-w-[8rem] text-right font-light">
-                        {rib.mediumText}
-                      </span>
-                    </span>
-                    <span class="work-summary-block body-copy-justify body-copy-index mt-2 w-full text-ink/90" data-clamp-lines="3" data-full-text={rib.summary}>{rib.summary}</span>
-                  </span>
-
-                  <span class="col-start-2 row-start-1 block aspect-[122/73] w-[8.5rem] overflow-hidden" aria-hidden="true">
-                    {rib.image ? (
-                      <Image
-                        class="h-full w-full object-cover opacity-0 transition-opacity duration-[650ms] ease-out motion-reduce:transition-none"
-                        src={rib.image.image}
-                        alt=""
-                        width="136"
-                        height="81"
-                        densities={[1, 2]}
-                        fit="cover"
-                        position="center"
-                        loading="lazy"
-                        data-rib-image
-                      />
-                    ) : (
-                      <span class="flex h-full w-full items-center justify-center border border-dashed border-black/25 bg-black/10 text-[9px] uppercase tracking-[0.18em] text-black/55">
-                        {COVER_PLACEHOLDER}
-                      </span>
-                    )}
-                  </span>
-                </a>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      <div class="pointer-events-none hidden w-[3.75rem] flex-col gap-y-3 lg:flex" aria-hidden="true">
-        {sternumFrames.map((frame, index) => (
-          <Image
-            class="block h-[2.45rem] w-full object-cover"
-            src={frame}
-            alt=""
-            width="60"
-            height="39"
-            densities={[1, 2]}
-            fit="cover"
-            position="center"
-            loading="lazy"
-            data-sternum-frame={index}
-          />
-        ))}
-      </div>
-
-      <div class="flex w-full flex-col gap-y-0 justify-self-start">
-        {rowIndexes.map((rowIndex) => {
-          const rib = rightRibs[rowIndex];
-
-          return (
-            <div class="w-full">
-              {rib && (
-                <a
-                  href={rib.href}
-                  class="grid w-full cursor-default grid-cols-[8.5rem_minmax(0,1fr)] grid-rows-[auto_auto] items-start gap-x-7 gap-y-0 text-ink no-underline focus-visible:outline focus-visible:outline-1 focus-visible:outline-accent focus-visible:outline-offset-2"
-                  aria-label={rib.accessibleLabel}
-                  data-work-rib
-                  data-rib-id={`${rib.id}-right`}
-                >
-                  <span class="col-start-1 row-start-1 block aspect-[122/73] w-[8.5rem] overflow-hidden" aria-hidden="true">
-                    {rib.image ? (
-                      <Image
-                        class="h-full w-full object-cover opacity-0 transition-opacity duration-[650ms] ease-out motion-reduce:transition-none"
-                        src={rib.image.image}
-                        alt=""
-                        width="136"
-                        height="81"
-                        densities={[1, 2]}
-                        fit="cover"
-                        position="center"
-                        loading="lazy"
-                        data-rib-image
-                      />
-                    ) : (
-                      <span class="flex h-full w-full items-center justify-center border border-dashed border-black/25 bg-black/10 text-[9px] uppercase tracking-[0.18em] text-black/55">
-                        {COVER_PLACEHOLDER}
-                      </span>
-                    )}
-                  </span>
-
-                  <span class="work-rib-copy col-start-2 row-start-2 flex min-w-0 flex-col text-left">
-                    <span class="work-rib-header grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-6">
-                      <span class="work-title-block font-medium">
-                        {rib.title}
-                      </span>
-                      <span class="work-meta-block min-w-[8rem] text-right font-light">
-                        {rib.mediumText}
-                      </span>
-                    </span>
-                    <span class="work-summary-block body-copy-justify body-copy-index mt-2 w-full text-ink/90" data-clamp-lines="3" data-full-text={rib.summary}>{rib.summary}</span>
-                  </span>
-                </a>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-    </>
-    )}
+  )}
 </section>
-
-<script>
-  const initTextClamps = () => {
-    const clampTargets = document.querySelectorAll('[data-clamp-lines][data-full-text]');
-
-    const getMaxHeight = (element: HTMLElement) => {
-      const styles = window.getComputedStyle(element);
-      const lineHeight = Number.parseFloat(styles.lineHeight);
-      const clampLines = Number.parseInt(element.dataset.clampLines ?? '3', 10);
-
-      if (!Number.isFinite(lineHeight) || !Number.isFinite(clampLines)) {
-        return element.clientHeight;
-      }
-
-      return Math.ceil(lineHeight * clampLines);
-    };
-
-    const overflows = (element: HTMLElement, maxHeight: number) => element.scrollHeight > maxHeight + 1;
-
-    const trimTerminalPunctuation = (text: string) => text.replace(/[.,;:!?—–-]+$/, '').trimEnd();
-
-    const normalizeCandidate = (text: string, length: number) => {
-      const candidate = trimTerminalPunctuation(text.slice(0, length).trimEnd());
-
-      if (length >= text.length) {
-        return candidate;
-      }
-
-      const lastWordBoundary = Math.max(candidate.lastIndexOf(' '), candidate.lastIndexOf('\n'), candidate.lastIndexOf('\t'));
-
-      if (lastWordBoundary <= 0) {
-        return candidate;
-      }
-
-      return trimTerminalPunctuation(candidate.slice(0, lastWordBoundary).trimEnd());
-    };
-
-    const clampElement = (element: HTMLElement) => {
-      const fullText = element.dataset.fullText?.trim() ?? '';
-
-      if (!fullText) {
-        return;
-      }
-
-      element.textContent = fullText;
-
-      if (element.getBoundingClientRect().width <= 0) {
-        return;
-      }
-
-      const maxHeight = getMaxHeight(element);
-
-      if (!overflows(element, maxHeight)) {
-        return;
-      }
-
-      let low = 0;
-      let high = fullText.length;
-      let best = '';
-
-      while (low <= high) {
-        const mid = Math.floor((low + high) / 2);
-        const candidate = normalizeCandidate(fullText, mid);
-        element.textContent = `${candidate}...`;
-
-        if (candidate && !overflows(element, maxHeight)) {
-          best = candidate;
-          low = mid + 1;
-        } else {
-          high = mid - 1;
-        }
-      }
-
-      element.textContent = best ? `${best}...` : '...';
-    };
-
-    const clampAll = () => {
-      clampTargets.forEach((target) => {
-        if (target instanceof HTMLElement) {
-          clampElement(target);
-        }
-      });
-    };
-
-    let resizeTimer: number | undefined;
-
-    const scheduleClamp = () => {
-      if (resizeTimer !== undefined) {
-        window.clearTimeout(resizeTimer);
-      }
-
-      resizeTimer = window.setTimeout(() => {
-        window.requestAnimationFrame(clampAll);
-      }, 120);
-    };
-
-    clampAll();
-    window.addEventListener('load', clampAll, { once: true });
-    window.addEventListener('resize', scheduleClamp);
-    window.addEventListener(
-      'pagehide',
-      () => {
-        if (resizeTimer !== undefined) {
-          window.clearTimeout(resizeTimer);
-        }
-
-        window.removeEventListener('resize', scheduleClamp);
-      },
-      { once: true }
-    );
-  };
-
-  const initDenseWorkIndex = () => {
-    const ribs = document.querySelectorAll('[data-work-rib]');
-    const timers = new Map<HTMLElement, number>();
-
-    const clearTimer = (rib: HTMLElement) => {
-      const timer = timers.get(rib);
-      if (timer !== undefined) {
-        window.clearTimeout(timer);
-        timers.delete(rib);
-      }
-    };
-
-    const setVisible = (rib: HTMLElement, visible: boolean) => {
-      const image = rib.querySelector('[data-rib-image]');
-      if (!(image instanceof HTMLElement)) {
-        return;
-      }
-
-      image.classList.toggle('opacity-100', visible);
-    };
-
-    const reveal = (rib: HTMLElement) => {
-      setVisible(rib, true);
-      clearTimer(rib);
-      const timer = window.setTimeout(() => {
-        setVisible(rib, false);
-        timers.delete(rib);
-      }, 5000);
-      timers.set(rib, timer);
-    };
-
-    const hide = (rib: HTMLElement) => {
-      clearTimer(rib);
-      setVisible(rib, false);
-    };
-
-    ribs.forEach((rib) => {
-      if (!(rib instanceof HTMLElement) || rib.dataset.bound === 'true') {
-        return;
-      }
-
-      rib.dataset.bound = 'true';
-      rib.addEventListener('mouseenter', () => reveal(rib));
-      rib.addEventListener('focus', () => reveal(rib));
-      rib.addEventListener('blur', () => hide(rib));
-      rib.addEventListener('touchstart', () => reveal(rib), { passive: true });
-    });
-
-    window.addEventListener(
-      'pagehide',
-      () => {
-        timers.forEach((timer) => window.clearTimeout(timer));
-        timers.clear();
-      },
-      { once: true }
-    );
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener(
-      'DOMContentLoaded',
-      () => {
-        initTextClamps();
-        initDenseWorkIndex();
-      },
-      { once: true }
-    );
-  } else {
-    initTextClamps();
-    initDenseWorkIndex();
-  }
-</script>
