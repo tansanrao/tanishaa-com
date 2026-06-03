@@ -554,6 +554,24 @@
       max-width: 60rem;
     }
 
+    .project-meta-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .project-meta-project {
+      grid-column: auto;
+    }
+
+    .project-meta-year {
+      justify-self: center;
+      text-align: center;
+    }
+
+    .project-meta-medium {
+      justify-self: end;
+      text-align: right;
+    }
+
     .project-gallery {
       align-items: stretch;
       grid-template-columns: minmax(0, 1fr) clamp(9rem, 14vw, 12rem);
