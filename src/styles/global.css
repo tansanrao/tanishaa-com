@@ -363,7 +363,7 @@
 
   .work-grid-image {
     display: block;
-    aspect-ratio: 2 / 1;
+    aspect-ratio: 3 / 2;
     width: 100%;
     overflow: hidden;
     background: rgba(27, 26, 28, 0.12);
@@ -392,7 +392,8 @@
   .work-grid-meta-row {
     display: grid;
     grid-template-columns: minmax(0, 0.86fr) minmax(0, 1fr);
-    align-items: start;
+    min-height: calc(11.5pt * 2);
+    align-items: end;
     gap: 1.1rem;
   }
 
