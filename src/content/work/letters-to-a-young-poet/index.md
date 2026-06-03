@@ -6,7 +6,7 @@ medium: "Book Design"
 indexSummary: "This project is a visual response to Letters to a Young Poet by Rainer Maria Rilke, using 35mm imagery taken over recent years, textures, and hand-drawn elements. The design translates the emotional and philosophical themes of the text into a visual language."
 detailSummary: "This project is a visual response to Letters to a Young Poet by Rainer Maria Rilke, using 35mm imagery taken over recent years, textures, and hand-drawn elements. The design translates the emotional and philosophical themes of the text into a visual language."
 listingImage:
-  src: "./main/1.jpg"
+  src: "./main/11.jpg"
   alt: "Letters to a Young Poet book design mockup one."
 mainGallery:
   - src: "./main/1.jpg"

@@ -1,5 +1,5 @@
 ---
-title: "Book Cover Series for Patricia Highsmith"
+title: "Book Cover Series" 
 order: 3
 year: "2025"
 medium: "Book Design"

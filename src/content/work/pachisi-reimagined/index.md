@@ -6,7 +6,7 @@ medium: "Artifact"
 indexSummary: "Created for my senior capstone, this project reimagines Pachisi, an ancient Indian race game, through a culturally grounded design system that restores a sense of cultural presence through design."
 detailSummary: "Created for my senior capstone, this project reimagines Pachisi, an ancient Indian race game, through a culturally grounded design system that restores a sense of cultural presence through design."
 listingImage:
-  src: "./main/1.jpg"
+  src: "./main/3.jpg"
   alt: "Pachisi Reimagined artifact mockup one."
 mainGallery:
   - src: "./main/1.jpg"
