@@ -1,6 +1,6 @@
 ---
 title: "Ensemble Arts"
-order: 1
+order: 2
 year: "2025"
 medium: "Typography"
 indexSummary: "Created for a typography project, this work includes three poster designs for Fire Shut Up in My Bones by Terence Blanchard, along with a leaflet mailer featuring a calendar of Ensemble Arts 2025 events. This project explores typography, composition, and visual hierarchy across both promotional and editorial formats. The three posters present distinct design approaches for interpreting the event’s themes, while the mailer extends the work into a structured print piece focused on information design and layout."

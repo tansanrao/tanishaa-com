@@ -1,6 +1,6 @@
 ---
 title: "Book Cover Series for Patricia Highsmith"
-order: 2
+order: 3
 year: "2025"
 medium: "Book Design"
 indexSummary: "This series of redesigned book covers reimagines three psychological thrillers by Patricia Highsmith—Strangers on a Train, The Talented Mr. Ripley, and The Price of Salt through a cohesive visual language centered on tension, identity, and psychological duality. The goal was to create a unified set that feels distinct yet interconnected, echoing the shared psychological intensity across the three novels."

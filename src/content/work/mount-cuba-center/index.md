@@ -1,6 +1,6 @@
 ---
 title: "Mt. Cuba Center"
-order: 4
+order: 6
 year: "2024"
 medium: "Corporate Identity"
 indexSummary: "Visual identity for Mt. Cuba Center that reflects its mission as a native plant garden and conservation institution. The logo system draws inspiration from the organic forms, textures, and structures found throughout the landscape. By balancing natural elegance with clarity and structure, the identity is designed to feel both educational and inviting, appealing to visitors, researchers, and the broader community. The final mark is adaptable across print and digital applications, ensuring consistency while celebrating the Center’s connection to nature."
