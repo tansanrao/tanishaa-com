@@ -419,18 +419,18 @@
   }
 
   .work-grid-summary {
-    display: -webkit-box;
-    height: 34.5pt;
+    --work-summary-line-height: 11.5pt;
+    --work-summary-lines: 3;
+    display: block;
+    height: calc(var(--work-summary-line-height) * var(--work-summary-lines));
     overflow: hidden;
     color: rgba(27, 26, 28, 0.88);
     font-size: 10pt;
     font-weight: 400;
-    line-height: 11.5pt;
+    line-height: var(--work-summary-line-height);
     text-align: justify;
     text-align-last: left;
     text-justify: inter-word;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
   }
 
   .work-process-section {
