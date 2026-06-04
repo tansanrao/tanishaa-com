@@ -14,7 +14,7 @@ const linkClass = (isActive: boolean) =>
     <div class="flex items-center justify-between text-[12px] uppercase tracking-[0.08em] text-ink">
       <a href="/" class="font-medium transition-colors hover:text-accent focus-visible-outline">Tanishaa Rao</a>
       <div class="hidden items-center gap-10 md:flex">
-        <a href="/work" class={linkClass(active === 'work')} aria-current={active === 'work' ? 'page' : undefined}>Work</a>
+        <a href="/work/studio" class={linkClass(active === 'work')} aria-current={active === 'work' ? 'page' : undefined}>Work</a>
         <a
           href="/contact"
           class={linkClass(active === 'contact')}
@@ -53,7 +53,7 @@ const linkClass = (isActive: boolean) =>
 
     <nav class="mobile-nav-menu" aria-label="Mobile primary">
       <a href="/" class="focus-visible-outline" data-mobile-nav-link>Home</a>
-      <a href="/work" class="focus-visible-outline" data-mobile-nav-link>Work</a>
+      <a href="/work/studio" class="focus-visible-outline" data-mobile-nav-link>Work</a>
       <a href="/about" class="focus-visible-outline" data-mobile-nav-link>About</a>
       <a href="/contact" class="focus-visible-outline" data-mobile-nav-link>Contact</a>
     </nav>
