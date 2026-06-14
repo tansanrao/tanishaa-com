@@ -401,6 +401,7 @@
   .work-grid-title {
     display: -webkit-box;
     overflow: hidden;
+    color: var(--color-ink);
     font-size: 10pt;
     line-height: 11.5pt;
     -webkit-box-orient: vertical;
@@ -408,8 +409,7 @@
   }
 
   .work-grid-medium {
-    color: rgba(27, 26, 28, 0.66);
-    font-weight: 400;
+    font-weight: 500;
   }
 
   .work-grid-title {
@@ -425,7 +425,7 @@
     display: block;
     height: calc(var(--work-summary-line-height) * var(--work-summary-lines));
     overflow: hidden;
-    color: rgba(27, 26, 28, 0.88);
+    color: var(--color-ink);
     font-size: 10pt;
     font-weight: 300;
     line-height: var(--work-summary-line-height);
