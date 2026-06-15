@@ -1,13 +1,29 @@
 ---
 interface Props {
-  bodyClass?: string;
+    bodyClass?: string;
 }
 
-const { bodyClass = '' } = Astro.props;
+const { bodyClass = "" } = Astro.props;
 ---
 
 <section class="w-full flex flex-col items-center">
-  <p class={`body-copy-justify body-copy-hero text-[12px] leading-relaxed tracking-[0.01em] ${bodyClass}`}>
-    I’m a multidisciplinary designer and first developed a passion for creative work through food, and then through things like graphic design, photography, and crafted objects. Most of my work involves juxtaposing different types of media and combining digital and physical components to create layered results that are based on concepts. Photography is a big part of my creative process, whether to tell stories or experiment. When I’m not working, I'm probably off exploring something unexpected, and those experiences often make their way back into my work.
-  </p>
+    <p
+        class={`body-copy-justify body-copy-hero text-[12px] leading-relaxed tracking-[0.01em] ${bodyClass}`}
+    >
+        My brother once asked me why I had a scientific calculator, a
+        respirator, and sandwich bags all on one shelf, I told him they were all
+        plaster supplies (i’ve never worked with plaster): the respirator was
+        for sanding and carving plaster, the sandwich bags were for creating a
+        plastic surface and improvising a piping bag, and the scientific
+        calculator was because I didn’t have a normal one and didn’t want to
+        touch my phone to do all the math. He looked at me and said, “Oh, that
+        makes sense.” Then I told him “everything makes sense with a little
+        imagination because everything I just said was bullshit.” Anyway, so
+        beyond that, I’m a multidisciplinary designer who graduated from
+        Antoinette Westphal College of Media Arts and Design in Philadelphia, PA
+        and love working across different mediums; photography, graphic design,
+        fine arts and craft to name a few. When I’m not working, I'm probably
+        off exploring something unexpected, and those experiences often make
+        their way back into my work.
+    </p>
 </section>
