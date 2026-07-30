@@ -1,5 +1,5 @@
 ---
-title: "Pachisi Reimagined (1/2)"
+title: "Pachisi Reimagined"
 order: 1
 year: "2026"
 medium: "Artifact"
