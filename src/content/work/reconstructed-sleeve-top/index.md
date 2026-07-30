@@ -1,6 +1,6 @@
 ---
 title: "Reconstructed Sleeve Top"
-category: "independent"
+category: "other"
 order: 1
 year: "2026"
 medium: "Garment Design"

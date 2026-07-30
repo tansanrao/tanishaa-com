@@ -11,8 +11,8 @@ interface Props {
 const { project } = Astro.props as Props;
 const processGallery = project.processGallery.length ? project.processGallery : project.mainGallery.slice(1, 5);
 const backHref = `/work/${project.category}`;
-const backLabel = project.category === 'independent' ? 'Back to Independent Work' : 'Back to Studio Projects';
-const showProcess = project.category === 'studio';
+const backLabel = project.category === 'other' ? 'Back to Other' : 'Back to Graphic Design';
+const showProcess = project.category === 'graphic-design';
 ---
 
 <section class="mx-auto mt-10 w-full max-w-[1280px] px-6 pb-24 sm:px-8 lg:pb-28">
@@ -29,7 +29,7 @@ const showProcess = project.category === 'studio';
     </h1>
 
     <div class="mt-9 lg:col-span-12">
-      <ProjectGallery gallery={project.mainGallery} title={project.title} showCaptions={project.category !== 'independent'} />
+      <ProjectGallery gallery={project.mainGallery} title={project.title} showCaptions={project.category === 'other'} />
     </div>
 
     <div class="mt-7 lg:col-span-12">

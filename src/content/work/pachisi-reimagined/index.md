@@ -27,6 +27,10 @@ mainGallery:
     alt: "Pachisi Reimagined artifact mockup eight."
   - src: "./main/9.jpg"
     alt: "Pachisi Reimagined artifact mockup nine."
+  - src: "./main/10.jpg"
+    alt: "Pachisi Reimagined game board with cowrie shells and an open rules guide."
+  - src: "./main/11.jpg"
+    alt: "Pachisi Reimagined wooden game box open with the rulebook and drawstring pouch inside."
 processGallery:
   - src: "./process/process-01.jpg"
     alt: "Pachisi Reimagined process image one."

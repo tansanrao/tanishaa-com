@@ -1,0 +1,11 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import WorkIndex from '../../components/work/WorkIndex.astro';
+import { getWorkProjects } from '../../lib/work';
+
+const projects = await getWorkProjects('graphic-design');
+---
+
+<Layout pageTitle="Tanishaa Rao — Graphic Design" activeNav="work">
+  <WorkIndex projects={projects} activeCategory="graphic-design" />
+</Layout>

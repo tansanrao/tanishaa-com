@@ -22,7 +22,7 @@ const work = defineCollection({
     return z
     .object({
       title: z.string(),
-      category: z.enum(['studio', 'independent']).default('studio'),
+      category: z.enum(['graphic-design', 'other']).default('graphic-design'),
       year: z.string(),
       medium: z.string().optional(),
       order: z.number(),
@@ -44,7 +44,7 @@ const work = defineCollection({
         .default([]),
     })
     .superRefine((data, ctx) => {
-      if (data.category !== 'independent') {
+      if (data.category !== 'other') {
         return;
       }
 
@@ -53,7 +53,7 @@ const work = defineCollection({
           ctx.addIssue({
             code: 'custom',
             path: ['mainGallery', index, 'caption'],
-            message: 'Independent work gallery images require captions.',
+            message: 'Other work gallery images require captions.',
           });
         }
       });

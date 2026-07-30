@@ -1,6 +1,6 @@
 ---
 title: "Pasta Shaping Board"
-category: "independent"
+category: "other"
 order: 3
 year: "2025"
 medium: "Object Design"

@@ -1,6 +1,6 @@
 ---
 title: "Ashtray Storage Box"
-category: "independent"
+category: "other"
 order: 2
 year: "2025"
 medium: "Object Design"
