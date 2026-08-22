@@ -1,7 +1,7 @@
 ---
 title: "Reconstructed Sleeve Top"
 category: "other"
-order: 1
+order: 2
 year: "2026"
 medium: "Garment Design"
 indexSummary: "Made entirely from the sleeves of a long-sleeve linen button-down shirt I had cut apart, this top was built around the idea of reusing the metal details from the elbow tabs (gauntlet button?). There was no actual inspiration other than the fact that I figured I could use those tabs, flipped onto the chest to resemble nipple piercings. Most of the structure comes from the shirt’s wrists and cuffs." 

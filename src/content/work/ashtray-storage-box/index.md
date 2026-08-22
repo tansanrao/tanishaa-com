@@ -1,7 +1,7 @@
 ---
 title: "Ashtray Storage Box"
 category: "other"
-order: 2
+order: 3
 year: "2025"
 medium: "Object Design"
 indexSummary: "Crafted entirely from a single block of poplar wood, this hand-carved ashtray combines natural material with functional design. The removable lid is thoughtfully designed to serve as a standalone ashtray. Finished with a custom stain to attain a rustic look while still allowing the natural grain to show through."

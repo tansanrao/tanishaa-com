@@ -1,7 +1,7 @@
 ---
 title: "Pasta Shaping Board"
 category: "other"
-order: 3
+order: 4
 year: "2025"
 medium: "Object Design"
 indexSummary: "Hand-carved from solid oak wood, this pasta board features a textured speckled carving at the top for added detail and grip, along with patterns along the lower half. Designed for making pasta as well as serving cheese or small foods."

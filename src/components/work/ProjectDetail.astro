@@ -12,7 +12,7 @@ const { project } = Astro.props as Props;
 const processGallery = project.processGallery.length ? project.processGallery : project.mainGallery.slice(1, 5);
 const backHref = `/work/${project.category}`;
 const backLabel = project.category === 'other' ? 'Back to Other' : 'Back to Graphic Design';
-const showProcess = project.category === 'graphic-design';
+const showProcess = project.category === 'graphic-design' || project.processGallery.length > 0 || Boolean(project.processHtml);
 ---
 
 <section class="mx-auto mt-10 w-full max-w-[1280px] px-6 pb-24 sm:px-8 lg:pb-28">
@@ -54,17 +54,21 @@ const showProcess = project.category === 'graphic-design';
           </h2>
         </div>
 
-        <div class="work-process-copy">
-          {project.processHtml ? (
-            <div class="rich-copy body-copy-justify body-copy-project body-copy-process-detail text-[9pt] leading-[1.55] text-ink/82" set:html={project.processHtml} />
-          ) : (
-            <p class="body-copy-justify body-copy-project body-copy-process-detail text-[9pt] leading-[1.55] text-ink/72">Process documentation is being organized for this project.</p>
-          )}
-        </div>
+        {(project.processHtml || project.category === 'graphic-design') && (
+          <div class="work-process-copy">
+            {project.processHtml ? (
+              <div class="rich-copy body-copy-justify body-copy-project body-copy-process-detail text-[9pt] leading-[1.55] text-ink/82" set:html={project.processHtml} />
+            ) : (
+              <p class="body-copy-justify body-copy-project body-copy-process-detail text-[9pt] leading-[1.55] text-ink/72">Process documentation is being organized for this project.</p>
+            )}
+          </div>
+        )}
 
-        <div class="work-process-gallery-wrap">
-          <ProcessGallery gallery={processGallery} title={project.title} />
-        </div>
+        {processGallery.length > 0 && (
+          <div class="work-process-gallery-wrap">
+            <ProcessGallery gallery={processGallery} title={project.title} />
+          </div>
+        )}
       </section>
     )}
   </div>
