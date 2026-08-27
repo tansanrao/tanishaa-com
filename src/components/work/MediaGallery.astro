@@ -73,21 +73,32 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
                   data-gallery-open
                   aria-label={`Open ${title} image ${index + 1} in fullscreen`}
                 >
-                  <Picture
-                    src={item.image}
-                    alt={item.alt}
-                    formats={['avif', 'webp']}
-                    width={Math.min(item.image.width, 1400)}
-                    widths={getResponsiveWidths(Math.min(item.image.width, 1400), [480, 960])}
-                    sizes="(min-width: 1024px) 900px, 100vw"
-                    layout="constrained"
-                    quality="high"
-                    fit="contain"
-                    position="center"
-                    priority={index === 0}
-                    class="h-full w-full object-contain"
-                    pictureAttributes={{ class: 'h-full w-full' }}
-                  />
+                  {item.image.format === 'gif' ? (
+                    <img
+                      src={item.image.src}
+                      alt={item.alt}
+                      width={item.image.width}
+                      height={item.image.height}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      class="h-full w-full object-contain"
+                    />
+                  ) : (
+                    <Picture
+                      src={item.image}
+                      alt={item.alt}
+                      formats={['avif', 'webp']}
+                      width={Math.min(item.image.width, 1400)}
+                      widths={getResponsiveWidths(Math.min(item.image.width, 1400), [480, 960])}
+                      sizes="(min-width: 1024px) 900px, 100vw"
+                      layout="constrained"
+                      quality="high"
+                      fit="contain"
+                      position="center"
+                      priority={index === 0}
+                      class="h-full w-full object-contain"
+                      pictureAttributes={{ class: 'h-full w-full' }}
+                    />
+                  )}
                 </button>
               ) : (
                 <video
@@ -174,17 +185,28 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
                 aria-pressed={index === 0 ? 'true' : 'false'}
               >
                 {item.type === 'image' ? (
-                  <Image
-                    class="h-full w-full object-cover object-center"
-                    src={item.image}
-                    alt=""
-                    width={192}
-                    height={128}
-                    quality="mid"
-                    fit="cover"
-                    position="center"
-                    loading="lazy"
-                  />
+                  item.image.format === 'gif' ? (
+                    <img
+                      class="h-full w-full object-cover object-center"
+                      src={item.image.src}
+                      alt=""
+                      width="192"
+                      height="128"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <Image
+                      class="h-full w-full object-cover object-center"
+                      src={item.image}
+                      alt=""
+                      width={192}
+                      height={128}
+                      quality="mid"
+                      fit="cover"
+                      position="center"
+                      loading="lazy"
+                    />
+                  )
                 ) : item.poster ? (
                   <>
                     <Image
@@ -222,21 +244,32 @@ const getResponsiveWidths = (maxWidth: number, candidates: number[]) => {
             data-index={index}
             aria-label={`Open ${title} image ${index + 1} in fullscreen`}
           >
-            <Picture
-              src={item.image}
-              alt={item.alt}
-              formats={['avif', 'webp']}
-              width={Math.min(item.image.width, 640)}
-              widths={getResponsiveWidths(Math.min(item.image.width, 640), [320])}
-              sizes="(min-width: 1024px) 100vw, (min-width: 640px) 33vw, 50vw"
-              layout="constrained"
-              quality="high"
-              fit="cover"
-              position="center"
-              class="h-full w-full object-cover object-center"
-              pictureAttributes={{ class: 'h-full w-full' }}
-              loading="lazy"
-            />
+            {item.image.format === 'gif' ? (
+              <img
+                src={item.image.src}
+                alt={item.alt}
+                width={item.image.width}
+                height={item.image.height}
+                loading="lazy"
+                class="h-full w-full object-cover object-center"
+              />
+            ) : (
+              <Picture
+                src={item.image}
+                alt={item.alt}
+                formats={['avif', 'webp']}
+                width={Math.min(item.image.width, 640)}
+                widths={getResponsiveWidths(Math.min(item.image.width, 640), [320])}
+                sizes="(min-width: 1024px) 100vw, (min-width: 640px) 33vw, 50vw"
+                layout="constrained"
+                quality="high"
+                fit="cover"
+                position="center"
+                class="h-full w-full object-cover object-center"
+                pictureAttributes={{ class: 'h-full w-full' }}
+                loading="lazy"
+              />
+            )}
           </button>
         )
       ))}

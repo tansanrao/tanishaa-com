@@ -60,6 +60,18 @@ const toViewerDimensions = (viewer: ViewerTransform) => ({
 });
 
 const toImageMedia = async (item: WorkImageMediaEntry): Promise<WorkImageMedia> => {
+  if (item.src.format === 'gif') {
+    return {
+      type: 'image',
+      image: item.src,
+      alt: item.alt,
+      caption: item.caption,
+      viewerSrc: item.src.src,
+      viewerWidth: item.src.width,
+      viewerHeight: item.src.height,
+    };
+  }
+
   const viewer = await getImage({
     src: item.src,
     format: 'webp',
