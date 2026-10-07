@@ -2,6 +2,7 @@
   "name": "tanishaa-com",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "pnpm@12.0.0",
   "scripts": {
     "dev": "astro dev",
     "build": "rm -rf dist && astro build && node scripts/prune-dist-images.mjs && node scripts/check-dist-images.mjs",

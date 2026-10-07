@@ -44,3 +44,28 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## Amp orbs
+
+`.agents/setup` prepares Node.js 26.10.0, the pnpm version pinned in
+`package.json`, locked dependencies (including development tools), and Astro's
+generated types. Run it from any directory with `path/to/repo/.agents/setup`.
+The repository needs no environment secrets or backing services to build.
+
+Amp runs setup before creating a reusable project snapshot. Fresh orbs using
+an exact snapshot skip setup; stale snapshots retain dependencies and pnpm's
+store, then rerun setup to reconcile the current lockfile. `.agents/resume`
+does not reinstall anything when an orb wakes.
+
+These lifecycle files must reach the project's default branch before they
+configure future orbs. `.amp/services.yaml` declares the supervised development
+server and its portal. Start it from the repository root with:
+
+```sh
+amp orb services ensure
+```
+
+The server listens on Amp's assigned `$PORT`, and Amp checks the homepage
+before reporting readiness. Use the printed portal URL to open the site
+outside the orb. Opening its declared link in the Portal tab also starts it
+when needed. Do not start the server from setup or resume.

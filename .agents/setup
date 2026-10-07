@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+# Install into the orb's standard PATH so later login shells and services
+# receive the same toolchain without needing a shell activation hook.
+node_version=26.10.0
+package_manager=$(node -p 'require("./package.json").packageManager')
+
+echo "Preparing Node.js $node_version and $package_manager"
+time {
+  if [[ "$(node --version)" != "v$node_version" ]]; then
+    npm install --global --prefix /usr/local --no-audit --no-fund "node@$node_version"
+    hash -r
+  fi
+  if ! command -v pnpm >/dev/null || [[ "$(pnpm --version)" != "${package_manager#pnpm@}" ]]; then
+    npm install --global --prefix /usr/local --no-audit --no-fund "$package_manager"
+    hash -r
+  fi
+}
+
+# pnpm cheaply checks restored node_modules on a stale snapshot. Keep its
+# store and installed dependencies in the snapshot; no custom cache is needed.
+echo "Installing locked dependencies (including development tools)"
+time NODE_ENV=development pnpm install --frozen-lockfile --yes
+
+echo "Generating Astro types"
+time pnpm exec astro sync
